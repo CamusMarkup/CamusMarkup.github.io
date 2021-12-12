@@ -1,0 +1,218 @@
+<html>
+
+<head>
+<title>CamusMarkup </title><meta charset="utf-8"></meta>
+<style>
+
+    #taMain {
+        appearance: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 50%;
+    }
+    #divDisplay {
+        appearance: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 50%;
+        overflow: auto;
+    }
+</style>
+</head>
+<body>
+
+<textarea id="taMain">
+= Camus: A humble markup language
+
+{img(logo):./camus-icon.png}
+
+Github repository: {link:https://github.com/CamusMarkup/Camus}
+
+The following is demo section.
+
+-----
+
+= Level 1 Header
+== Level 2 Header
+=== Level 3 Header
+==== Level 4 Header
+===== Level 5 Header
+====== Level 6 Header
+
+5 dash or more will be converted to horizontal ruler.
+
+*bold* /italics/ _underline_ ~~delete~~ `inline code`
+
+{img:https://img_link} {img(alt):https://img_link}
+
+{link(Here):https://sebastian.graphics}
+
+{ref:other_cm3_file.cm3}
+
+{footnote@1}  {footnote@2}
+
+
+&gt; This beat is mine
+&gt; You can have it
+&gt; Just take your time
+&gt; And do what you wanna do (And do that dance)
+&gt; 
+&gt; This beat is mine
+&gt; You can have it
+&gt; Just party down
+&gt; And do what you wanna do (But do that dance)
+
+#{verbatim
+    Tonight, before you lay down to the sweetness of your sleep
+        Do you question your surrender to the drop from Lover's Leap
+    Or does the anaesthetic darkness take hold on it's very own?
+        Does your body rise in service with not one dissenting groan?
+#}
+
+#{ignore
+  ignored region
+  ignored region
+  ignored region
+#}
+
+#{quote
+    I'm not giving in to security under pressure
+    I'm not missing out on the promise of adventure
+    I'm not giving up on implausible dreams
+
+    Experience to extremes
+    Experience to extremes
+#}
+
+#{code javascript
+  function hanoi(n, from, via, to) {
+      if (n === 0) { throw new Error('no disk.'); }
+      else if (n === 1) { console.log('from ' + from + ' to ' + to); }
+      else {
+          hanoi(n-1, from, to, via);
+          console.log('from ' + from + ' to ' + to);
+          hanoi(n-1, via, to, from);
+      }
+  }
+#}
+
++ list1
++ list2
+  1.  ol1
+  2.  ol2
+  3.  ol3
+- ulist3
+
+
+[1]: blahblahblahblahblah
+[2]: blahblahbalhblah
+</textarea>
+<div id="divDisplay">
+
+</div>
+
+<script type="module" lang="ts">
+    import * as CamusCore from '../camus3/src/main';
+let taMain = document.getElementById('taMain');
+let divDisplay = document.getElementById('divDisplay');
+let renderer = new CamusCore.Renderer.CamusHTMLRenderer();
+divDisplay.innerHTML = renderer.render(CamusCore.Parser.parse(taMain.value));
+taMain.addEventListener('input', (e) => {
+    divDisplay.innerHTML = renderer.render(CamusCore.Parser.parse(taMain.value));
+});
+</script>
+
+<noscript>
+    <h1>Camus: A humble markup language</h1>
+    <img src="./camus-icon.png" alt="camus logo" />
+    Github repository: <a href="https://github.com/CamusMarkup/Camus">https://github.com/CamusMarkup/Camus</a>
+
+    <h2>Sample</h2>
+
+    <pre>
+= Level 1 Header
+== Level 2 Header
+=== Level 3 Header
+==== Level 4 Header
+===== Level 5 Header
+====== Level 6 Header
+
+> This beat is mine
+> You can have it
+> Just take your time
+> And do what you wanna do (And do that dance)
+> 
+> This beat is mine
+> You can have it
+> Just party down
+> And do what you wanna do (But do that dance)
+
+#{verbatim
+    Tonight, before you lay down to the sweetness of your sleep
+        Do you question your surrender to the drop from Lover's Leap
+    Or does the anaesthetic darkness take hold on it's very own?
+        Does your body rise in service with not one dissenting groan?
+}
+
+#{ignore
+  ignored region
+  ignored region
+  ignored region
+#}
+
+#{quote
+    I'm not giving in to security under pressure
+    I'm not missing out on the promise of adventure
+    I'm not giving up on implausible dreams
+
+    Experience to extremes
+    Experience to extremes
+#}
+
+#{code javascript
+  function hanoi(n, from, via, to) {
+      if (n === 0) { throw new Error('no disk.'); }
+      else if (n === 1) { console.log('from ' + from + ' to ' + to); }
+      else {
+          hanoi(n-1, from, to, via);
+          console.log('from ' + from + ' to ' + to);
+          hanoi(n-1, via, to, from);
+      }
+  }
+#}
+
++ list1
++ list2
+  1.  ol1
+  2.  ol2
+  3.  ol3
+- ulist3
+
+more than 5 dash will be converted to horizontal rule.
+
+-----
+
+*bold* /italics/ _underline_ ~~delete~~ `inline code`
+
+{img:https://img_link} {img(alt):https://img_link}
+
+{link(Here):https://sebastian.graphics}
+
+{ref:other_cm3_file.cm3}
+
+{footnote@1}  {footnote@2}
+
+
+[1]: blahblahblahblahblah
+[2]: blahblahbalhblah
+
+    </pre>
+</noscript>
+</body>
+
+</html>
+
