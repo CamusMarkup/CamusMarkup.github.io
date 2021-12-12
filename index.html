@@ -10,6 +10,7 @@
         top: 0;
         left: 0;
         bottom: 0;
+        height: 100%;
         width: 50%;
     }
     #divDisplay {
@@ -19,6 +20,7 @@
         right: 0;
         bottom: 0;
         width: 50%;
+        height: 100%;
         overflow: auto;
     }
 </style>
@@ -116,7 +118,7 @@ The following is demo section.
 </div>
 
 <script type="module" lang="ts">
-    import * as CamusCore from '../camus3/src/main';
+    import * as CamusCore from '@bctnry/camus-core';
 let taMain = document.getElementById('taMain');
 let divDisplay = document.getElementById('divDisplay');
 let renderer = new CamusCore.Renderer.CamusHTMLRenderer();
