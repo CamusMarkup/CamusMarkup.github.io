@@ -1,0 +1,300 @@
+= `@bctnry/camus-core` Documentation
+
+The core parsing & rendering library.
+
+== {#toc} Table of Contents
+
+1.  {ref(Install):#install}
+2.  {ref(Quick start):#quick-start}
+3.  {ref(API):#api}
+    1.  {ref(Data Structure):#api.data}
+    2.  {ref(Using `HTMLRenderer`):#using-htmlrenderer}
+
+== {#install} Install
+
+#{code bash
+    npm install --save @bctnry/camus-core
+#}
+
+{ref(Top):#top}
+
+== {#quick-start} Quick start
+
+#{code typescript
+    import * as camus from '@bctnry/camus-core';
+    let source = getSourceString();
+    let renderer = new camus.Renderer.HTMLRenderer();
+    let htmlResult = renderer.render(camus.Parser.parse(source));
+#}
+
+{ref(Top):#top}
+
+== {#api} API
+
+=== {#api.data} Data Structure
+
+#{code typescript
+
+// A CamusMarkup document is parsed into an array of `CamusLogicLine`, which in term
+// is an array of `CamusNode`.
+
+export declare enum CamusNodeType {
+    Heading = 1,
+    Block = 2,
+    InlineStyle = 3,
+    InlineCode = 4,
+    InlineIgnore = 5,
+    Link = 6,
+    Ref = 7,
+    FootnoteRef = 8,
+    FootnoteText = 9,
+    FootnoteBlock = 10,
+    Tag = 11,
+    Image = 12,
+    List = 13,
+    ListItem = 14,
+    HorizontalRule = 15
+}
+
+// headings.
+export declare type HeadingNode = {
+    _nodeType: CamusNodeType.Heading;
+    level: number;
+    text: CamusLine;
+};
+
+// (1) blockquotes that start with `>`
+// (2) blocks that starts with `#{` and ends with `#}`
+export declare type BlockNode = {
+    _nodeType: CamusNodeType.Block;
+    type: string;
+    arg: string;
+    text: CamusLogicLine[];
+};
+
+// all kinds of inline style.
+export declare type InlineStyleNode = {
+    _nodeType: CamusNodeType.InlineStyle;
+    style: ('bold' | 'italics' | 'underline' | 'delete' | 'code')[];
+    text: CamusLine;
+};
+
+// links (e.g. `{link(link text):https://example.org}`)
+export declare type LinkNode = {
+    _nodeType: CamusNodeType.Link;
+    url: string;
+    text: CamusLine;
+};
+
+// tag (e.g. `{#tag-name}`)
+export declare type TagNode = {
+    _nodeType: CamusNodeType.Tag;
+    id: string;
+};
+
+// tag/file reference (e.g. `{ref:another_file.cm}`)
+// `HTMLRenderer` in @bctnry/camus-core only output HTML for references to tags.
+// references to files are reserved for other uses (see `Extending HTMLRenderer`).
+export declare type RefNode = {
+    _nodeType: CamusNodeType.Ref;
+    path: string;
+    text: CamusLine;
+};
+
+// footnote reference (e.g. `{footnote@1}`)
+export declare type FootnoteRefNode = {
+    _nodeType: CamusNodeType.FootnoteRef;
+    id: string;
+};
+
+// normally footnotes are like this:
+//     [1] footnote 1 text
+//     [2] footnote 2 text
+//         additional info
+//     [3] footnote 3 text
+// a FootnoteTextNode represents one entry in a normal footnote block.
+// a FootnoteBlockNode represents a whole block of consecutive FootnoteTextNode
+// with no blank lines in between.
+export declare type FootnoteTextNode = {
+    _nodeType: CamusNodeType.FootnoteText;
+    id: string;
+    text: CamusLogicLine[];
+};
+export declare type FootnoteBlockNode = {
+    _nodeType: CamusNodeType.FootnoteBlock;
+    content: FootnoteTextNode[];
+};
+
+export declare type ImageNode = {
+    _nodeType: CamusNodeType.Image;
+    url: string;
+    alt: string;
+};
+
+export declare type ListNode = {
+    _nodeType: CamusNodeType.List;
+    ordered: boolean;
+    items: ListItemNode[];
+};
+export declare type ListItemNode = {
+    _nodeType: CamusNodeType.ListItem;
+    text: CamusLogicLine[];
+};
+
+export declare type HorizontalRuleNode = {
+    _nodeType: CamusNodeType.HorizontalRule;
+};
+
+// "atomic nodes" means inline nodes that will not contain other nodes.
+export declare type CamusAtomicNode = string | LinkNode | RefNode | FootnoteRefNode | InlineIgnoreNode | ImageNode | TagNode;
+export declare function isCamusAtomicNode(x: CamusNode): x is CamusAtomicNode;
+
+export declare type CamusInlineNode = InlineStyleNode | CamusAtomicNode;
+export declare function isCamusInlineNode(x: CamusNode): x is CamusInlineNode;
+export declare type CamusLine = CamusInlineNode[];
+
+// a CamusLineNode is a node that in source text takes one single line of text.
+// a CamusLineNOdeis not a CamusLine.
+export declare type CamusLineNode = FootnoteTextNode | HeadingNode | HorizontalRuleNode;
+export declare function isCamusLineNode(x: CamusNode): x is CamusLineNode;
+
+// a CamusBlockNode is a node that in source text spans multiple lines of text.
+export declare type CamusBlockNode = BlockNode | ListNode | FootnoteBlockNode;
+export declare function isCamusBlockNode(x: CamusNode): x is CamusBlockNode;
+
+export declare type CamusLogicLine = CamusNode[];
+export declare type CamusNode = CamusInlineNode | CamusLineNode | CamusBlockNode;
+#}
+
+{ref(Top):#top}
+
+=== {#using-htmlrenderer} Using `HTMLRenderer`
+
+#{code typescript
+    export declare class HTMLRenderer {
+        // the following 3 protected members are loaded with `HTMLRendererOption` in constructor.
+        // even if they're marked as protected, DO NOT override. 
+        protected _additionalHead: string[];
+        protected _externalStylesheet: string[];
+        protected _replacePunctuation: {
+            singleQuote?: [string, string];
+            doubleQuote?: [string, string];
+            singleDash?: string;
+            doubleDash?: string;
+        } | undefined;
+        constructor(options?: HTMLRendererOption);
+
+        // the prettyprinter @bctnry/camus-core used to record generated output.
+        // if you need to extends HTMLRenderer, use this to record output.
+        // even if it's marked as protected, DO NOT override. 
+        protected _pp: PrettyPrinter;
+
+        // the main render process entry.
+        render(x: ast.CamusLogicLine[]): string;
+
+        // @bctnry/camus-core supports converting normal quotes into "special quotes".
+        // (e.g. in French people uses « and »). this is used to record the state of
+        // such conversion.
+        // even if they're marked as protected, DO NOT override. 
+        protected _singleQuote: boolean;
+        protected _doubleQuote: boolean;
+
+        // render a single line/logic line. note that a CamusLine is not the same thing
+        // as a CamusLogicLine: the former corresponds to the result of parsing one
+        // single line of source text, whereas the latter can corresponds to multiple
+        // lines of text.
+        // even if they're marked as protected, DO NOT override. 
+        protected _renderLine(x: ast.CamusLine): void;
+        protected _renderLogicLine(x: ast.CamusLogicLine, noWrapper?: boolean): void;
+
+        // dispatch method used by `_renderLine` & `_renderLogicLine`.
+        // even if it's marked as protected, DO NOT override. 
+        protected _render(x: ast.CamusNode): void;
+
+        // methods that handles the rendering of different nodes.
+        // most of the time these are the methods you only need to override.
+        protected _text(n: string): void;
+        protected _heading(n: ast.HeadingNode): void;
+        protected _tag(n: ast.TagNode): void;
+        protected _block(n: ast.BlockNode): void;
+        protected _inlineStyle(n: ast.InlineStyleNode): void;
+        protected _link(n: ast.LinkNode): void;
+        protected _ref(n: ast.RefNode): void;
+        protected _footnoteRef(n: ast.FootnoteRefNode): void;
+        protected _footnoteText(n: ast.FootnoteTextNode): void;
+        protected _footnoteBlock(n: ast.FootnoteBlockNode): void;
+        protected _image(n: ast.ImageNode): void;
+        protected _list(n: ast.ListNode): void;
+
+        // used to generate HTML header part & footer part.
+        // not used in @bctnry/camus-cli.
+        preamble(): void;
+        postamble(): void;
+    }
+#}
+
+==== `PrettyPrinter`
+#{code typescript
+    export declare class PrettyPrinter {
+        // current result.
+        private _res;
+
+        // current indent level.
+        private _indent;
+
+        // this method adds one indent (which is currently 4 spaces).
+        addIndent(): this;
+
+        // this method removes one indent.
+        removeIndent(): this;
+
+        // this method adds an indent to the result.
+        indent(): this;
+
+        // this method adds a newline to the result.
+        line(): this;
+
+        // this method adds a string to the result.
+        string(x: string): this;
+
+        // this getter returns the result.
+        get result(): string;
+
+        // this method clears the result buffer.
+        clear(): void;
+    }
+#}
+
+==== `HTMLRendererOption`
+
+#{code typescript
+    export declare type HTMLRendererOption = {
+        // strings that need to be inserted into the <head> tag.
+        additionalHead?: string[];
+
+        // stylesheets that need to be included.
+        additionalStylesheet?: string[];
+
+        // @bctnry/camus-core supports:
+        // 1.  converting quotes into "special quotes"
+        //     (e.g. converting into « and »)
+        // 2.  converting dashes into en & em dash.
+        replacePunctuation?: {
+            singleQuote?: [string, string];
+            doubleQuote?: [string, string];
+            singleDash?: string;
+            doubleDash?: string;
+        };
+    };
+    export declare class HTMLRenderer {
+        // ...
+        constructor(options?: HTMLRendererOption);
+        // ...
+    }
+#}
+
+-----
+
+Last Update: 2021.12.15
+
+{ref(Back):index.cm}

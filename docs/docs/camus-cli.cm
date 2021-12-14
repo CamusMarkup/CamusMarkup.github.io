@@ -1,0 +1,56 @@
+= `@bctnry/camus-cli` Documentation
+
+/TODO: finish this./
+
+The CLI utility.
+
+== {#toc} Table of Contents
+
+1.  {ref(`init`):#init}
+2.  {ref(`run`):#run}
+    1.  {ref(Config format):#config}
+
+== {#init} `init`
+
+
+
+== {#run} `run`
+
+=== {#config} Config format
+
+#{code json
+    {
+        "basePath": "docs/docs",
+        "main": "index.cm",
+        "preamble": {
+            "enabled": true,
+            "path": "preamble.html"
+        },
+        "postamble": {
+            "enabled": true,
+            "path": "postamble.html"
+        },
+        "rss": {
+            "enabled": false,
+            "targetFilePath": "feed.rss",
+            "title": "[input title here]",
+            "description": "[input description here]",
+            "copyright": "[input copyright info here]",
+            "channelUrl": "[input channel url here]",
+            "itemBaseUrl": "[input item base url here]"
+        },
+        "sourceHighlight": {
+            "enabled": true,
+            "command": [
+                "source-highlight",
+                "-s",
+                "%lang%"
+            ],
+            "langAlias": {
+                "typescript": "javascript"
+            }
+        }
+    }
+#}
+
+

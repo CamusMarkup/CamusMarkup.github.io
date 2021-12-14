@@ -1,0 +1,32 @@
+html {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+body {
+    margin: 0;
+    padding: 2rem 3rem;
+}
+
+.code {
+    margin-left: 1rem;
+    border-left: 2px black solid;
+    padding-left: 2rem;
+}
+.code-bash::before {
+    content: 'BASH';
+    border: 1px black solid;
+    display: block;
+    width: max-content;
+}
+.code-typescript::before {
+    content: 'TypeScript';
+    border: 1px black solid;
+    display: block;
+    width: max-content;
+}
+
+a {
+    color: black;
+}
+
