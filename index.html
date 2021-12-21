@@ -34,6 +34,10 @@
 
 Github repository: {link:https://github.com/CamusMarkup/Camus}
 
+Documentation: {link:./docs/index.html}
+
+VSCode extension: {link(SebastianHiggins.vscode-camus):https://marketplace.visualstudio.com/items?itemName=SebastianHiggins.vscode-camus}
+
 The following is demo section.
 
 -----
@@ -58,15 +62,27 @@ The following is demo section.
 {footnote@1}  {footnote@2}
 
 
-&gt; This beat is mine
-&gt; You can have it
-&gt; Just take your time
-&gt; And do what you wanna do (And do that dance)
-&gt; 
-&gt; This beat is mine
-&gt; You can have it
-&gt; Just party down
-&gt; And do what you wanna do (But do that dance)
+> Feeling My Heart Run Slow, I’m feeling like...
+> Letting my blood run cold, feeling like...
+> You told me I’ve got no soul
+> So I’m feeling like letting my heart run slow 
+
+> She keeps on calling me / 
+> I don't know where / 
+> She keeps on calling me / 
+> I don't know where / 
+> Telling me where to go / 
+> Telling me no
+
+> And head up, dear, you're shallow and blind / 
+> And head up, dear, the rabbit might die / 
+> And you say "Hi", and you say "Hi"
+> 
+> Because I'm putting up with your constant whine / 
+> And I won't last too long / 
+> And friendly faces with put-on smiles / 
+> A drunken mind game past / 
+> Cause I'm putting the boot in tonight
 
 #{verbatim
     Tonight, before you lay down to the sweetness of your sleep
@@ -112,6 +128,7 @@ The following is demo section.
 
 [1]: blahblahblahblahblah
 [2]: blahblahbalhblah
+    
 </textarea>
 <div id="divDisplay">
 
@@ -121,7 +138,7 @@ The following is demo section.
     import * as CamusCore from '@bctnry/camus-core';
 let taMain = document.getElementById('taMain');
 let divDisplay = document.getElementById('divDisplay');
-let renderer = new CamusCore.Renderer.CamusHTMLRenderer();
+let renderer = new CamusCore.Renderer.HTMLRenderer();
 divDisplay.innerHTML = renderer.render(CamusCore.Parser.parse(taMain.value));
 taMain.addEventListener('input', (e) => {
     divDisplay.innerHTML = renderer.render(CamusCore.Parser.parse(taMain.value));
