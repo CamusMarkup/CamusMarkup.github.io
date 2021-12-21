@@ -2,7 +2,7 @@
 
 + {ref(`@bctnry/camus-core` Documentation):camus-core.cm}
 
-  Current version: 0.1.7
+  Current version: 0.1.8
 #{ignore
  + {ref(`@bctnry/camus-cli` Documentation):camus-cli.cm}
 

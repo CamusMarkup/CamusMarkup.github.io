@@ -60,15 +60,27 @@ The following is demo section.
 {footnote@1}  {footnote@2}
 
 
-&gt; This beat is mine
-&gt; You can have it
-&gt; Just take your time
-&gt; And do what you wanna do (And do that dance)
-&gt; 
-&gt; This beat is mine
-&gt; You can have it
-&gt; Just party down
-&gt; And do what you wanna do (But do that dance)
+> Feeling My Heart Run Slow, I’m feeling like...
+> Letting my blood run cold, feeling like...
+> You told me I’ve got no soul
+> So I’m feeling like letting my heart run slow 
+
+> She keeps on calling me / 
+> I don't know where / 
+> She keeps on calling me / 
+> I don't know where / 
+> Telling me where to go / 
+> Telling me no
+
+> And head up, dear, you're shallow and blind / 
+> And head up, dear, the rabbit might die / 
+> And you say "Hi", and you say "Hi"
+> 
+> Because I'm putting up with your constant whine / 
+> And I won't last too long / 
+> And friendly faces with put-on smiles / 
+> A drunken mind game past / 
+> Cause I'm putting the boot in tonight
 
 #{verbatim
     Tonight, before you lay down to the sweetness of your sleep
@@ -114,6 +126,7 @@ The following is demo section.
 
 [1]: blahblahblahblahblah
 [2]: blahblahbalhblah
+    
 </textarea>
 <div id="divDisplay">
 
@@ -552,7 +565,7 @@ function hmrAcceptRun(bundle, id) {
 var _bctnryCamusCore = require('@bctnry/camus-core');
 let taMain = document.getElementById('taMain');
 let divDisplay = document.getElementById('divDisplay');
-let renderer = new _bctnryCamusCore.Renderer.CamusHTMLRenderer();
+let renderer = new _bctnryCamusCore.Renderer.HTMLRenderer();
 divDisplay.innerHTML = renderer.render(_bctnryCamusCore.Parser.parse(taMain.value));
 taMain.addEventListener('input', e => {
   divDisplay.innerHTML = renderer.render(_bctnryCamusCore.Parser.parse(taMain.value));
@@ -594,6 +607,78 @@ exports.Renderer = exports.Parser = exports.AST = void 0;
 exports.AST = __importStar(require("./AST"));
 exports.Parser = __importStar(require("./Parser"));
 exports.Renderer = __importStar(require("./Renderer"));
+const Parser = __importStar(require("./Parser"));
+let a = Parser.parse(`
+
+= TrulyVisual
+
+== Example
+
+#{code trulyvisual
+    Nick became so angry that he just couldn't help yelling at Victor in the end:
+    {char(20):I told you that this will happen...}
+    {wait(2/3),word:I TOLD YOU THAT {whole,shake(strong,1):THIS COULD HAPPEN!!}}
+    {char(70):THE MACHINE HAS BROKEN DOWN LIKE 30 MINUTES AGO!!
+      {wait} WHERE IN {speed(50):THE FLYING FVCK} HAVE YOU BEEN?!}
+#}
+
+== Reference
+
+=== \`by\` command
+
+These commands control how to display the text.
+
++ \`<by>\`: the raw \`by\` command.
++ \`<by-char>\`: display the content character by character. Equivalent to \`<by type=char>\`.
++ \`<by-word>\`: display the content word by word, separated by characters that are normally used to separate words. Equivalent to \`<by type=word>\`
++ \`<by-whole>\`: display the content as a whole. Equivalent to \`<by type=whole>\`
+
+These commands are cancelled with \`</by>\`.
+
+These commands take the following arguments:
+
++ \`speed=[speed]\`: control the displaying speed. Only affects \`<by-char>\` and \`<by-word>\`. \`speed=100\` is defined to be display each subject (a character in \`<by-char>\`, a word in \`<by-word>\`) in the timespan of 10ms.
+
+\`by\` commands are "on-hold", meaning their effects lasts after completing the execution.
+
+=== \`wait\`
+
+\`<wait>\` 
+
+\`wait\` is "immediate" command, 
+
+=== Visual effect
+
++ \`shake\`: shake the content of the current \`by\` block.
+  + \`intensity\` (\`mild\`|\`normal\`|\`strong\`): the intensity.
++ \`fade-in\`: fade in.
+  + \`time\`: time.
++ \`fade-out\`: fade out.
+  + \`time\`: time.
++ \`blink\`: blinking.
+  + \`time\`: time.
+  
+
+=== Modifiers
+
+
+== EBNF
+
+\`\`\`
+Document ::= (Tag | Text)*
+Text = ([^\<>]|\(\|&|<|>|=[0-9]*))+
+Tag ::= CommandTag | CloseTag
+CommandTag ::= "<" TagIdentifier? Modifier* ">"
+TagIdentifier = [^<>.="' ]+
+Modifier ::= ModifierIdentifier "=" Value
+ModifierIdentifier ::= (TagIdentifier ".")? AtomicModifierIdentifier
+AtomicModifierIdentifier = [^<>.="' ]+
+Value = ([^\<>=]|\(\|<|>|=|=[0-9]*))+
+CloseTag ::= "</" TagIdentifier ">"
+\`\`\`
+
+
+`);
 
 },{"./AST":"5RikK","./Parser":"7xEoP","./Renderer":"6MBKk"}],"5RikK":[function(require,module,exports) {
 "use strict";
@@ -611,10 +696,11 @@ var CamusNodeType;
     CamusNodeType[CamusNodeType["FootnoteRef"] = 8] = "FootnoteRef";
     CamusNodeType[CamusNodeType["FootnoteText"] = 9] = "FootnoteText";
     CamusNodeType[CamusNodeType["FootnoteBlock"] = 10] = "FootnoteBlock";
-    CamusNodeType[CamusNodeType["Image"] = 11] = "Image";
-    CamusNodeType[CamusNodeType["List"] = 12] = "List";
-    CamusNodeType[CamusNodeType["ListItem"] = 13] = "ListItem";
-    CamusNodeType[CamusNodeType["HorizontalRule"] = 14] = "HorizontalRule";
+    CamusNodeType[CamusNodeType["Tag"] = 11] = "Tag";
+    CamusNodeType[CamusNodeType["Image"] = 12] = "Image";
+    CamusNodeType[CamusNodeType["List"] = 13] = "List";
+    CamusNodeType[CamusNodeType["ListItem"] = 14] = "ListItem";
+    CamusNodeType[CamusNodeType["HorizontalRule"] = 15] = "HorizontalRule";
 })(CamusNodeType = exports.CamusNodeType || (exports.CamusNodeType = {}));
 function isCamusAtomicNode(x) {
     return typeof x === 'string' || [
@@ -624,6 +710,7 @@ function isCamusAtomicNode(x) {
         CamusNodeType.InlineCode,
         CamusNodeType.InlineIgnore,
         CamusNodeType.Image,
+        CamusNodeType.Tag,
     ].includes(x._nodeType);
 }
 exports.isCamusAtomicNode = isCamusAtomicNode;
@@ -672,12 +759,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parse = exports._parseInline = void 0;
+exports.parse = void 0;
 const Assert_1 = require("./Assert");
 const ast = __importStar(require("./AST"));
 const REGEX_BRACE_TAG = /^\{([a-zA-Z0-9]+)(?:\(((?:\\\)|[^)])*)\))?:((?:\\\}|[^}])*)\}/;
 const REGEX_FOOTNOTE_TAG = /^\{footnote@((?:\\\}|\\\]|[^}\]\s])*)\}/;
-const REGEX_INLINE_CODE = /^`((?:\\`|[^`]*))`/;
+const REGEX_HASH_TAG = /^\{#((?:\\\}|[^}])*)\}/;
+function _checkIfSpecialTreatmentRequiredInline(x) {
+    return !!(REGEX_BRACE_TAG.exec(x)
+        || REGEX_FOOTNOTE_TAG.exec(x)
+        || REGEX_HASH_TAG.exec(x));
+}
 /*
 
 
@@ -730,10 +822,14 @@ function _parseInline(x) {
             _StashPush({ _nodeType: ast.CamusNodeType.FootnoteRef, id: matchres[1] });
             subj = subj.substring(matchres[0].length);
         }
+        else if (matchres = REGEX_HASH_TAG.exec(subj)) {
+            _StashPush({ _nodeType: ast.CamusNodeType.Tag, id: matchres[1] });
+            subj = subj.substring(matchres[0].length);
+        }
         else if (matchres = REGEX_BRACE_TAG.exec(subj)) {
             switch (matchres[1]) {
                 case 'link': {
-                    _StashPush({ _nodeType: ast.CamusNodeType.Link, url: matchres[3] || '', text: matchres[2] || '' });
+                    _StashPush({ _nodeType: ast.CamusNodeType.Link, url: matchres[3] || '', text: _parseInline(matchres[2] || '') });
                     break;
                 }
                 case 'img': {
@@ -741,7 +837,7 @@ function _parseInline(x) {
                     break;
                 }
                 case 'ref': {
-                    _StashPush({ _nodeType: ast.CamusNodeType.Ref, path: matchres[3] || '' });
+                    _StashPush({ _nodeType: ast.CamusNodeType.Ref, path: matchres[3] || '', text: _parseInline(matchres[2] || '') });
                     break;
                 }
                 default: {
@@ -751,12 +847,8 @@ function _parseInline(x) {
             }
             subj = subj.substring(matchres[0].length);
         }
-        else if (matchres = REGEX_INLINE_CODE.exec(subj)) {
-            _StashPush({ _nodeType: ast.CamusNodeType.InlineCode, text: matchres[1] });
-            subj = subj.substring(matchres[0].length);
-        }
         else {
-            if ('*/_'.includes(subj[0]) || subj.startsWith('~~')) {
+            if ('*/_`'.includes(subj[0]) || subj.startsWith('~~')) {
                 if (stack.includes(subj[0]) || (subj.startsWith('~~') && stack.includes('~~'))) {
                     // x[0] in stack.
                     // NOTE: now there's a problem. if we have an input like this:
@@ -786,8 +878,8 @@ function _parseInline(x) {
                     //     stack=[*]
                     // which then we follow the normal procedure.
                     let rewindStash = [];
-                    while ((subj.startsWith('~~') && stack[stack.length - 1] !== '~~')
-                        || (!subj.startsWith('~~') && (stack[stack.length - 1] !== subj[0]))) {
+                    while ((subj.startsWith('~~') && stack[stack.length - 1] && stack[stack.length - 1] !== '~~')
+                        || (!subj.startsWith('~~') && stack[stack.length - 1] && (stack[stack.length - 1] !== subj[0]))) {
                         let stashTop = stash.pop();
                         rewindStash = [
                             stack.pop(),
@@ -804,7 +896,8 @@ function _parseInline(x) {
                     styleArray.push(s === '*' ? 'bold'
                         : s === '/' ? 'italics'
                             : s === '_' ? 'underline'
-                                : 'delete');
+                                : s === '`' ? 'code'
+                                    : 'delete');
                     let lastStashTop = stash.pop();
                     let newNode = { _nodeType: ast.CamusNodeType.InlineStyle, style: styleArray, text: lastStashTop };
                     _StashPush(newNode);
@@ -817,13 +910,19 @@ function _parseInline(x) {
                     subj = subj.substring(subj.startsWith('~~') ? 2 : 1);
                 }
             }
-            else if (subj[0] === '\\' && subj[1] && '*/_~{`'.includes(subj[1])) {
-                _StashPush(subj[1]);
-                subj = subj.substring(2);
+            else if (subj[0] === '\\') {
+                if (subj[1] && '*/_`~{`'.includes(subj[1])) {
+                    _StashPush(subj[1]);
+                    subj = subj.substring(2);
+                }
+                else {
+                    _StashPush(subj[0]);
+                    subj = subj.substring(1);
+                }
             }
             else {
                 let i = 0;
-                while (subj[i] && !'*/_~{`\\'.includes(subj[i])) {
+                while (subj[i] && !'*/_~`\\'.includes(subj[i]) && !_checkIfSpecialTreatmentRequiredInline(subj.substring(i))) {
                     i++;
                 }
                 _StashPush(subj.substring(0, i));
@@ -848,7 +947,6 @@ function _parseInline(x) {
     (0, Assert_1.ASSERT)('at the end of _parseInline stash should be an ast.CamusLine', stash.map((v) => ast.isCamusInlineNode(v)).reduce((a, b) => a && b, true));
     return stash;
 }
-exports._parseInline = _parseInline;
 // NOTE:
 // 1.  a logic line means:
 //         a.  one line of heading.
@@ -1106,7 +1204,8 @@ function _parseDocument(x) {
     return result;
 }
 function parse(x) {
-    return _parseDocument(x.split('\n'));
+    let res = _parseDocument(x.split('\n'));
+    return res;
 }
 exports.parse = parse;
 
@@ -1143,11 +1242,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CamusHTMLRenderer = void 0;
+exports.HTMLRenderer = void 0;
 const ast = __importStar(require("./AST"));
 const PrettyPrinter_1 = require("./PrettyPrinter");
 // NOTE: punctuations inside inline code should not be affected.
-class CamusHTMLRenderer {
+class HTMLRenderer {
     constructor(options) {
         this._additionalHead = [];
         this._externalStylesheet = [];
@@ -1213,8 +1312,8 @@ class CamusHTMLRenderer {
                     this._inlineStyle(x);
                     break;
                 }
-                case ast.CamusNodeType.InlineCode: {
-                    this._inlineCode(x);
+                case ast.CamusNodeType.Tag: {
+                    this._tag(x);
                     break;
                 }
                 case ast.CamusNodeType.Link: {
@@ -1259,9 +1358,10 @@ class CamusHTMLRenderer {
         }
     }
     _text(n) {
+        let s = n;
         if (this._replacePunctuation) {
             if (!this._replacePunctuation.singleQuote && !this._replacePunctuation.doubleQuote) {
-                this._pp.string(n.replace(/--/g, this._replacePunctuation.doubleDash || '--').replace(/-/g, this._replacePunctuation.singleDash || '-'));
+                s = s.replace(/--/g, this._replacePunctuation.doubleDash || '--').replace(/-/g, this._replacePunctuation.singleDash || '-');
             }
             else {
                 let singleQuote = this._replacePunctuation.singleQuote || ["'", "'"];
@@ -1285,17 +1385,21 @@ class CamusHTMLRenderer {
                         }
                     }
                 }
-                this._pp.string(r.join(''));
+                s = r.join('');
             }
         }
         else {
-            this._pp.string(n);
+            s = n;
         }
+        this._pp.string(s.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
     }
     _heading(n) {
         this._pp.indent().string(`<h${n.level}>`);
         this._renderLine(n.text);
         this._pp.string(`</h${n.level}>`).line();
+    }
+    _tag(n) {
+        this._pp.string(`<a name="${n.id}"></a>`);
     }
     _block(n) {
         if (n.type === 'ignore') {
@@ -1304,19 +1408,19 @@ class CamusHTMLRenderer {
         switch (n.type) {
             // NOTE: in `verbatim` and `code`, assumes both only contain strings.
             case 'verbatim': {
-                this._pp.indent().string(`<pre ${n.arg ? `class="${n.arg}"` : ''}>`).line().addIndent();
+                this._pp.indent().string(`<pre ${n.arg ? `class="${n.arg}"` : ''}>`);
                 n.text.forEach((v) => {
                     v.forEach((j) => { this._text(j); this._pp.line(); });
                 });
-                this._pp.removeIndent().indent().string(`</pre>`).line();
+                this._pp.string(`</pre>`).line();
                 break;
             }
             case 'code': {
-                this._pp.indent().string(`<pre class="code code-${n.arg}">`).line().addIndent();
+                this._pp.indent().string(`<pre class="code code-${n.arg}">`);
                 n.text.forEach((v) => {
                     v.forEach((j) => { this._text(j); this._pp.line(); });
                 });
-                this._pp.removeIndent().indent().string(`</pre>`).line();
+                this._pp.string(`</pre>`).line();
                 break;
             }
             case 'quote': {
@@ -1335,22 +1439,38 @@ class CamusHTMLRenderer {
         return;
     }
     _inlineStyle(n) {
-        let start = n.style.map((v) => `<${v}>`).join('').replace(/bold/g, 'b').replace(/italics/g, 'i').replace(/underline/g, 'span style="text-decoration:underline"').replace(/delete/g, 'del');
-        let end = n.style.map((v) => `</${v}>`).join('').replace(/bold/g, 'b').replace(/italics/g, 'i').replace(/underline/g, 'span').replace(/delete/g, 'del');
+        let start = n.style.map((v) => `<${v}>`).join('').replace(/bold/g, 'b').replace(/italics/g, 'i').replace(/underline/g, 'span style="text-decoration:underline"').replace(/delete/g, 'del').replace(/code/g, 'code');
+        let end = n.style.map((v) => `</${v}>`).join('').replace(/bold/g, 'b').replace(/italics/g, 'i').replace(/underline/g, 'span').replace(/delete/g, 'del').replace(/code/g, 'code');
         this._pp.string(start);
         this._renderLine(n.text);
         this._pp.string(end);
     }
-    _inlineCode(n) {
-        this._pp.string(`<code>${n.text}</code>`);
-    }
     _link(n) {
-        this._pp.string(`<a href="${n.url}">${n.text || n.url}</a>`);
+        this._pp.string(`<a href="${n.url}">`);
+        if (n.text && n.text.filter((v) => v && (typeof v !== 'string' || v.trim())).length > 0) {
+            this._renderLine(n.text);
+        }
+        else {
+            this._pp.string(n.url);
+        }
+        this._pp.string('</a>');
     }
     _ref(n) {
         // NOTE: core lib does nothing on ref nodes.
         // to make use of ref node, extends from CamusHTMLRenderer or write your own.
-        this._pp.string('');
+        if (n.path.startsWith('#')) {
+            this._pp.string(`<a href="${n.path}">`);
+            if (n.text && n.text.filter((v) => v && (typeof v !== 'string' || v.trim())).length > 0) {
+                this._renderLine(n.text);
+            }
+            else {
+                this._pp.string(n.path);
+            }
+            this._pp.string('</a>');
+        }
+        else {
+            this._pp.string('');
+        }
     }
     _footnoteRef(n) {
         this._pp.string(`<sup><a href="#cite-${n.id}">[${n.id}]</a></sup>`);
@@ -1375,7 +1495,7 @@ class CamusHTMLRenderer {
         this._pp.line().indent().string(`<${tagName}>`).line().addIndent();
         n.items.forEach((v) => {
             this._pp.indent().string(`<li>`);
-            v.text.forEach((j) => j.forEach((k) => this._render(k)));
+            v.text.forEach((v, i) => this._renderLogicLine(v, i === 0));
             this._pp.string(`</li>`).line();
         });
         this._pp.removeIndent().indent().string(`</${tagName}>`).line();
@@ -1403,7 +1523,7 @@ class CamusHTMLRenderer {
             .line();
     }
 }
-exports.CamusHTMLRenderer = CamusHTMLRenderer;
+exports.HTMLRenderer = HTMLRenderer;
 
 },{"./AST":"5RikK","./PrettyPrinter":"54PH2"}],"54PH2":[function(require,module,exports) {
 "use strict";
@@ -1451,9 +1571,7 @@ exports.PrettyPrinter = PrettyPrinter;
 <noscript>
     <h1>Camus: A humble markup language</h1>
     <img src="/camus-icon.1f87535c.png" alt="camus logo">
-    Github repository: <a href="https://github.com/CamusMarkup/Camus">https://github.com/CamusMarkup/Camus</a><br />
-    Documentation: <a href="./docs/index.html">./docs/index.html</a><br />
-    VSCode extension: <a href="https://marketplace.visualstudio.com/items?itemName=SebastianHiggins.vscode-camus">SebastianHiggins.vscode-camus</a>
+    Github repository: <a href="https://github.com/CamusMarkup/Camus">https://github.com/CamusMarkup/Camus</a>
 
     <h2>Sample</h2>
 
