@@ -607,78 +607,6 @@ exports.Renderer = exports.Parser = exports.AST = void 0;
 exports.AST = __importStar(require("./AST"));
 exports.Parser = __importStar(require("./Parser"));
 exports.Renderer = __importStar(require("./Renderer"));
-const Parser = __importStar(require("./Parser"));
-let a = Parser.parse(`
-
-= TrulyVisual
-
-== Example
-
-#{code trulyvisual
-    Nick became so angry that he just couldn't help yelling at Victor in the end:
-    {char(20):I told you that this will happen...}
-    {wait(2/3),word:I TOLD YOU THAT {whole,shake(strong,1):THIS COULD HAPPEN!!}}
-    {char(70):THE MACHINE HAS BROKEN DOWN LIKE 30 MINUTES AGO!!
-      {wait} WHERE IN {speed(50):THE FLYING FVCK} HAVE YOU BEEN?!}
-#}
-
-== Reference
-
-=== \`by\` command
-
-These commands control how to display the text.
-
-+ \`<by>\`: the raw \`by\` command.
-+ \`<by-char>\`: display the content character by character. Equivalent to \`<by type=char>\`.
-+ \`<by-word>\`: display the content word by word, separated by characters that are normally used to separate words. Equivalent to \`<by type=word>\`
-+ \`<by-whole>\`: display the content as a whole. Equivalent to \`<by type=whole>\`
-
-These commands are cancelled with \`</by>\`.
-
-These commands take the following arguments:
-
-+ \`speed=[speed]\`: control the displaying speed. Only affects \`<by-char>\` and \`<by-word>\`. \`speed=100\` is defined to be display each subject (a character in \`<by-char>\`, a word in \`<by-word>\`) in the timespan of 10ms.
-
-\`by\` commands are "on-hold", meaning their effects lasts after completing the execution.
-
-=== \`wait\`
-
-\`<wait>\` 
-
-\`wait\` is "immediate" command, 
-
-=== Visual effect
-
-+ \`shake\`: shake the content of the current \`by\` block.
-  + \`intensity\` (\`mild\`|\`normal\`|\`strong\`): the intensity.
-+ \`fade-in\`: fade in.
-  + \`time\`: time.
-+ \`fade-out\`: fade out.
-  + \`time\`: time.
-+ \`blink\`: blinking.
-  + \`time\`: time.
-  
-
-=== Modifiers
-
-
-== EBNF
-
-\`\`\`
-Document ::= (Tag | Text)*
-Text = ([^\<>]|\(\|&|<|>|=[0-9]*))+
-Tag ::= CommandTag | CloseTag
-CommandTag ::= "<" TagIdentifier? Modifier* ">"
-TagIdentifier = [^<>.="' ]+
-Modifier ::= ModifierIdentifier "=" Value
-ModifierIdentifier ::= (TagIdentifier ".")? AtomicModifierIdentifier
-AtomicModifierIdentifier = [^<>.="' ]+
-Value = ([^\<>=]|\(\|<|>|=|=[0-9]*))+
-CloseTag ::= "</" TagIdentifier ">"
-\`\`\`
-
-
-`);
 
 },{"./AST":"5RikK","./Parser":"7xEoP","./Renderer":"6MBKk"}],"5RikK":[function(require,module,exports) {
 "use strict";
@@ -911,7 +839,7 @@ function _parseInline(x) {
                 }
             }
             else if (subj[0] === '\\') {
-                if (subj[1] && '*/_`~{`'.includes(subj[1])) {
+                if (subj[1]) {
                     _StashPush(subj[1]);
                     subj = subj.substring(2);
                 }
@@ -922,7 +850,10 @@ function _parseInline(x) {
             }
             else {
                 let i = 0;
-                while (subj[i] && !'*/_~`\\'.includes(subj[i]) && !_checkIfSpecialTreatmentRequiredInline(subj.substring(i))) {
+                while (subj[i]
+                    && (!'*/_~`\\'.includes(subj[i])
+                        || (subj[i] === '~' && subj[i + 1] !== '~'))
+                    && !_checkIfSpecialTreatmentRequiredInline(subj.substring(i))) {
                     i++;
                 }
                 _StashPush(subj.substring(0, i));
@@ -1288,7 +1219,6 @@ class HTMLRenderer {
                 }
             }
             this._render(v);
-            this._pp.line();
         });
         if (!noWrapper && firstPassed) {
             this._pp.string('</p>').line();
@@ -1391,7 +1321,7 @@ class HTMLRenderer {
         else {
             s = n;
         }
-        this._pp.string(s.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+        this._pp.string(s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'));
     }
     _heading(n) {
         this._pp.indent().string(`<h${n.level}>`);
