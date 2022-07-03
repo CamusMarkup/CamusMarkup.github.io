@@ -9,65 +9,47 @@
 </head>
 <body>
     <h1><code>@bctnry/camus-core</code> Documentation</h1>
-
-<p>The core parsing & rendering library.
-</p>
+<p>The core parsing &amp; rendering library.</p>
 <h2><a name="toc"></a> Table of Contents</h2>
 
-
 <ol>
-    <li><a href="#install">Install</a>
-</li>
-    <li><a href="#quick-start">Quick start</a>
-</li>
+    <li><a href="#install">Install</a></li>
+    <li><a href="#quick-start">Quick start</a></li>
     <li><a href="#api">API</a>
-
     <ol>
-        <li><a href="#api.data">Data Structure</a>
-</li>
-        <li><a href="#using-htmlrenderer">Using <code>HTMLRenderer</code></a>
-</li>
+        <li><a href="#api.data">Data Structure</a></li>
+        <li><a href="#using-htmlrenderer">Using <code>HTMLRenderer</code></a></li>
     </ol>
-
 </li>
 </ol>
-
 <h2><a name="install"></a> Install</h2>
-
 <pre class="code code-bash">
-<!-- Generator: GNU source-highlight 3.1.9
+<!-- Generator: GNU source-highlight 3.1.8
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite --><tt>npm install --save @bctnry/camus-core</tt></pre>
-
-<p><a href="#top">Top</a>
-</p>
+<p><a href="#top">Top</a></p>
 <h2><a name="quick-start"></a> Quick start</h2>
-
 <pre class="code code-typescript">
-<!-- Generator: GNU source-highlight 3.1.9
+<!-- Generator: GNU source-highlight 3.1.8
 by Lorenzo Bettini
 http://www.lorenzobettini.it
-http://www.gnu.org/software/src-highlite --><tt><b><font color="#0000FF">import</font></b> <font color="#990000">*</font> <b><font color="#0000FF">as</font></b> camus <b><font color="#0000FF">from</font></b> <font color="#FF0000">'@bctnry/camus-core'</font><font color="#990000">;</font>
-<b><font color="#0000FF">let</font></b> source <font color="#990000">=</font> <b><font color="#000000">getSourceString</font></b><font color="#990000">();</font>
-<b><font color="#0000FF">let</font></b> renderer <font color="#990000">=</font> <b><font color="#0000FF">new</font></b> camus<font color="#990000">.</font>Renderer<font color="#990000">.</font><b><font color="#000000">HTMLRenderer</font></b><font color="#990000">();</font>
-<b><font color="#0000FF">let</font></b> htmlResult <font color="#990000">=</font> renderer<font color="#990000">.</font><b><font color="#000000">render</font></b><font color="#990000">(</font>camus<font color="#990000">.</font>Parser<font color="#990000">.</font><b><font color="#000000">parse</font></b><font color="#990000">(</font>source<font color="#990000">));</font></tt></pre>
-
-<p><a href="#top">Top</a>
-</p>
+http://www.gnu.org/software/src-highlite --><tt>import <font color="#990000">*</font> as camus from <font color="#FF0000">'@bctnry/camus-core'</font><font color="#990000">;</font>
+let source <font color="#990000">=</font> <b><font color="#000000">getSourceString</font></b><font color="#990000">();</font>
+let renderer <font color="#990000">=</font> <b><font color="#0000FF">new</font></b> camus<font color="#990000">.</font>Renderer<font color="#990000">.</font><b><font color="#000000">HTMLRenderer</font></b><font color="#990000">();</font>
+let htmlResult <font color="#990000">=</font> renderer<font color="#990000">.</font><b><font color="#000000">render</font></b><font color="#990000">(</font>camus<font color="#990000">.</font>Parser<font color="#990000">.</font><b><font color="#000000">parse</font></b><font color="#990000">(</font>source<font color="#990000">));</font></tt></pre>
+<p><a href="#top">Top</a></p>
 <h2><a name="api"></a> API</h2>
-
 <h3><a name="api.data"></a> Data Structure</h3>
-
 <pre class="code code-typescript">
-<!-- Generator: GNU source-highlight 3.1.9
+<!-- Generator: GNU source-highlight 3.1.8
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite --><tt>
 <i><font color="#9A1900">// A CamusMarkup document is parsed into an array of `CamusLogicLine`, which in term</font></i>
 <i><font color="#9A1900">// is an array of `CamusNode`.</font></i>
 
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">enum</font></b> CamusNodeType <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare <b><font color="#0000FF">enum</font></b> CamusNodeType <font color="#FF0000">{</font>
     Heading <font color="#990000">=</font> <font color="#993399">1</font><font color="#990000">,</font>
     Block <font color="#990000">=</font> <font color="#993399">2</font><font color="#990000">,</font>
     InlineStyle <font color="#990000">=</font> <font color="#993399">3</font><font color="#990000">,</font>
@@ -78,15 +60,17 @@ http://www.gnu.org/software/src-highlite --><tt>
     FootnoteRef <font color="#990000">=</font> <font color="#993399">8</font><font color="#990000">,</font>
     FootnoteText <font color="#990000">=</font> <font color="#993399">9</font><font color="#990000">,</font>
     FootnoteBlock <font color="#990000">=</font> <font color="#993399">10</font><font color="#990000">,</font>
-    Tag <font color="#990000">=</font> <font color="#993399">11</font><font color="#990000">,</font>
-    Image <font color="#990000">=</font> <font color="#993399">12</font><font color="#990000">,</font>
-    List <font color="#990000">=</font> <font color="#993399">13</font><font color="#990000">,</font>
-    ListItem <font color="#990000">=</font> <font color="#993399">14</font><font color="#990000">,</font>
-    HorizontalRule <font color="#990000">=</font> <font color="#993399">15</font>
+    Table <font color="#990000">=</font> <font color="#993399">11</font><font color="#990000">,</font>
+    WikiTag <font color="#990000">=</font> <font color="#993399">12</font><font color="#990000">,</font>
+    Tag <font color="#990000">=</font> <font color="#993399">13</font><font color="#990000">,</font>
+    Image <font color="#990000">=</font> <font color="#993399">14</font><font color="#990000">,</font>
+    List <font color="#990000">=</font> <font color="#993399">15</font><font color="#990000">,</font>
+    ListItem <font color="#990000">=</font> <font color="#993399">16</font><font color="#990000">,</font>
+    HorizontalRule <font color="#990000">=</font> <font color="#993399">17</font>
 <font color="#FF0000">}</font>
 
 <i><font color="#9A1900">// headings.</font></i>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> HeadingNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type HeadingNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>Heading<font color="#990000">;</font>
     level<font color="#990000">:</font> number<font color="#990000">;</font>
     text<font color="#990000">:</font> CamusLine<font color="#990000">;</font>
@@ -94,29 +78,29 @@ http://www.gnu.org/software/src-highlite --><tt>
 
 <i><font color="#9A1900">// (1) blockquotes that start with `&gt;`</font></i>
 <i><font color="#9A1900">// (2) blocks that starts with `#{` and ends with `#}`</font></i>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> BlockNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type BlockNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>Block<font color="#990000">;</font>
-    <b><font color="#0000FF">type</font></b><font color="#990000">:</font> string<font color="#990000">;</font>
+    type<font color="#990000">:</font> string<font color="#990000">;</font>
     arg<font color="#990000">:</font> string<font color="#990000">;</font>
     text<font color="#990000">:</font> CamusLogicLine<font color="#990000">[];</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
 
 <i><font color="#9A1900">// all kinds of inline style.</font></i>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> InlineStyleNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type InlineStyleNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>InlineStyle<font color="#990000">;</font>
     style<font color="#990000">:</font> <font color="#990000">(</font><font color="#FF0000">'bold'</font> <font color="#990000">|</font> <font color="#FF0000">'italics'</font> <font color="#990000">|</font> <font color="#FF0000">'underline'</font> <font color="#990000">|</font> <font color="#FF0000">'delete'</font> <font color="#990000">|</font> <font color="#FF0000">'code'</font><font color="#990000">)[];</font>
     text<font color="#990000">:</font> CamusLine<font color="#990000">;</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
 
 <i><font color="#9A1900">// links (e.g. `{link(link text):https://example.org}`)</font></i>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> LinkNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type LinkNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>Link<font color="#990000">;</font>
     url<font color="#990000">:</font> string<font color="#990000">;</font>
     text<font color="#990000">:</font> CamusLine<font color="#990000">;</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
 
 <i><font color="#9A1900">// tag (e.g. `{#tag-name}`)</font></i>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> TagNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type TagNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>Tag<font color="#990000">;</font>
     id<font color="#990000">:</font> string<font color="#990000">;</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
@@ -124,14 +108,22 @@ http://www.gnu.org/software/src-highlite --><tt>
 <i><font color="#9A1900">// tag/file reference (e.g. `{ref:another_file.cm}`)</font></i>
 <i><font color="#9A1900">// `HTMLRenderer` in @bctnry/camus-core only output HTML for references to tags.</font></i>
 <i><font color="#9A1900">// references to files are reserved for other uses (see `Extending HTMLRenderer`).</font></i>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> RefNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type RefNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>Ref<font color="#990000">;</font>
     path<font color="#990000">:</font> string<font color="#990000">;</font>
     text<font color="#990000">:</font> CamusLine<font color="#990000">;</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
 
+<i><font color="#9A1900">// wiki node (e.g. `{wiki:wiki-page-name}`)</font></i>
+<i><font color="#9A1900">// used in @bctnry/camus-cli for generating wiki pages.</font></i>
+<b><font color="#0000FF">export</font></b> declare type WikiTagNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+    _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>WikiTag<font color="#990000">;</font>
+    name<font color="#990000">:</font> string<font color="#990000">;</font>
+    text<font color="#990000">:</font> CamusLine<font color="#990000">;</font>
+<font color="#FF0000">}</font><font color="#990000">;</font>
+
 <i><font color="#9A1900">// footnote reference (e.g. `{footnote@1}`)</font></i>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> FootnoteRefNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type FootnoteRefNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>FootnoteRef<font color="#990000">;</font>
     id<font color="#990000">:</font> string<font color="#990000">;</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
@@ -144,65 +136,68 @@ http://www.gnu.org/software/src-highlite --><tt>
 <i><font color="#9A1900">// a FootnoteTextNode represents one entry in a normal footnote block.</font></i>
 <i><font color="#9A1900">// a FootnoteBlockNode represents a whole block of consecutive FootnoteTextNode</font></i>
 <i><font color="#9A1900">// with no blank lines in between.</font></i>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> FootnoteTextNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type FootnoteTextNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>FootnoteText<font color="#990000">;</font>
     id<font color="#990000">:</font> string<font color="#990000">;</font>
     text<font color="#990000">:</font> CamusLogicLine<font color="#990000">[];</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> FootnoteBlockNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type FootnoteBlockNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>FootnoteBlock<font color="#990000">;</font>
     content<font color="#990000">:</font> FootnoteTextNode<font color="#990000">[];</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
 
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> ImageNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type ImageNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>Image<font color="#990000">;</font>
     url<font color="#990000">:</font> string<font color="#990000">;</font>
     alt<font color="#990000">:</font> string<font color="#990000">;</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
 
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> ListNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type ListNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>List<font color="#990000">;</font>
     ordered<font color="#990000">:</font> boolean<font color="#990000">;</font>
     items<font color="#990000">:</font> ListItemNode<font color="#990000">[];</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> ListItemNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type ListItemNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>ListItem<font color="#990000">;</font>
     text<font color="#990000">:</font> CamusLogicLine<font color="#990000">[];</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
 
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> HorizontalRuleNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare type TableNode <font color="#990000">=</font> <font color="#FF0000">{</font>
+    _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>Table<font color="#990000">;</font>
+    header<font color="#990000">:</font> CamusLine<font color="#990000">[][];</font>
+    body<font color="#990000">:</font> CamusLine<font color="#990000">[][];</font>
+<font color="#FF0000">}</font><font color="#990000">;</font>
+
+<b><font color="#0000FF">export</font></b> declare type HorizontalRuleNode <font color="#990000">=</font> <font color="#FF0000">{</font>
     _nodeType<font color="#990000">:</font> CamusNodeType<font color="#990000">.</font>HorizontalRule<font color="#990000">;</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
 
 <i><font color="#9A1900">// "atomic nodes" means inline nodes that will not contain other nodes.</font></i>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> CamusAtomicNode <font color="#990000">=</font> string <font color="#990000">|</font> LinkNode <font color="#990000">|</font> RefNode <font color="#990000">|</font> FootnoteRefNode <font color="#990000">|</font> InlineIgnoreNode <font color="#990000">|</font> ImageNode <font color="#990000">|</font> TagNode<font color="#990000">;</font>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">function</font></b> <b><font color="#000000">isCamusAtomicNode</font></b><font color="#990000">(</font>x<font color="#990000">:</font> CamusNode<font color="#990000">):</font> x is CamusAtomicNode<font color="#990000">;</font>
+<b><font color="#0000FF">export</font></b> declare type CamusAtomicNode <font color="#990000">=</font> string <font color="#990000">|</font> LinkNode <font color="#990000">|</font> RefNode <font color="#990000">|</font> FootnoteRefNode <font color="#990000">|</font> InlineIgnoreNode <font color="#990000">|</font> ImageNode <font color="#990000">|</font> TagNode <font color="#990000">|</font> WikiTagNode<font color="#990000">;</font>
+<b><font color="#0000FF">export</font></b> declare <b><font color="#0000FF">function</font></b> <b><font color="#000000">isCamusAtomicNode</font></b><font color="#990000">(</font>x<font color="#990000">:</font> CamusNode<font color="#990000">):</font> x is CamusAtomicNode<font color="#990000">;</font>
 
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> CamusInlineNode <font color="#990000">=</font> InlineStyleNode <font color="#990000">|</font> CamusAtomicNode<font color="#990000">;</font>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">function</font></b> <b><font color="#000000">isCamusInlineNode</font></b><font color="#990000">(</font>x<font color="#990000">:</font> CamusNode<font color="#990000">):</font> x is CamusInlineNode<font color="#990000">;</font>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> CamusLine <font color="#990000">=</font> CamusInlineNode<font color="#990000">[];</font>
+<b><font color="#0000FF">export</font></b> declare type CamusInlineNode <font color="#990000">=</font> InlineStyleNode <font color="#990000">|</font> CamusAtomicNode<font color="#990000">;</font>
+<b><font color="#0000FF">export</font></b> declare <b><font color="#0000FF">function</font></b> <b><font color="#000000">isCamusInlineNode</font></b><font color="#990000">(</font>x<font color="#990000">:</font> CamusNode<font color="#990000">):</font> x is CamusInlineNode<font color="#990000">;</font>
+<b><font color="#0000FF">export</font></b> declare type CamusLine <font color="#990000">=</font> CamusInlineNode<font color="#990000">[];</font>
 
 <i><font color="#9A1900">// a CamusLineNode is a node that in source text takes one single line of text.</font></i>
 <i><font color="#9A1900">// a CamusLineNOdeis not a CamusLine.</font></i>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> CamusLineNode <font color="#990000">=</font> FootnoteTextNode <font color="#990000">|</font> HeadingNode <font color="#990000">|</font> HorizontalRuleNode<font color="#990000">;</font>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">function</font></b> <b><font color="#000000">isCamusLineNode</font></b><font color="#990000">(</font>x<font color="#990000">:</font> CamusNode<font color="#990000">):</font> x is CamusLineNode<font color="#990000">;</font>
+<b><font color="#0000FF">export</font></b> declare type CamusLineNode <font color="#990000">=</font> FootnoteTextNode <font color="#990000">|</font> HeadingNode <font color="#990000">|</font> HorizontalRuleNode<font color="#990000">;</font>
+<b><font color="#0000FF">export</font></b> declare <b><font color="#0000FF">function</font></b> <b><font color="#000000">isCamusLineNode</font></b><font color="#990000">(</font>x<font color="#990000">:</font> CamusNode<font color="#990000">):</font> x is CamusLineNode<font color="#990000">;</font>
 
 <i><font color="#9A1900">// a CamusBlockNode is a node that in source text spans multiple lines of text.</font></i>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> CamusBlockNode <font color="#990000">=</font> BlockNode <font color="#990000">|</font> ListNode <font color="#990000">|</font> FootnoteBlockNode<font color="#990000">;</font>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">function</font></b> <b><font color="#000000">isCamusBlockNode</font></b><font color="#990000">(</font>x<font color="#990000">:</font> CamusNode<font color="#990000">):</font> x is CamusBlockNode<font color="#990000">;</font>
+<b><font color="#0000FF">export</font></b> declare type CamusBlockNode <font color="#990000">=</font> BlockNode <font color="#990000">|</font> ListNode <font color="#990000">|</font> FootnoteBlockNode <font color="#990000">|</font> TableNode<font color="#990000">;</font>
+<b><font color="#0000FF">export</font></b> declare <b><font color="#0000FF">function</font></b> <b><font color="#000000">isCamusBlockNode</font></b><font color="#990000">(</font>x<font color="#990000">:</font> CamusNode<font color="#990000">):</font> x is CamusBlockNode<font color="#990000">;</font>
 
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> CamusLogicLine <font color="#990000">=</font> CamusNode<font color="#990000">[];</font>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> CamusNode <font color="#990000">=</font> CamusInlineNode <font color="#990000">|</font> CamusLineNode <font color="#990000">|</font> CamusBlockNode<font color="#990000">;</font></tt></pre>
-
-<p><a href="#top">Top</a>
-</p>
+<b><font color="#0000FF">export</font></b> declare type CamusLogicLine <font color="#990000">=</font> CamusNode<font color="#990000">[];</font>
+<b><font color="#0000FF">export</font></b> declare type CamusNode <font color="#990000">=</font> CamusInlineNode <font color="#990000">|</font> CamusLineNode <font color="#990000">|</font> CamusBlockNode<font color="#990000">;</font></tt></pre>
+<p><a href="#top">Top</a></p>
 <h3><a name="using-htmlrenderer"></a> Using <code>HTMLRenderer</code></h3>
-
 <pre class="code code-typescript">
-<!-- Generator: GNU source-highlight 3.1.9
+<!-- Generator: GNU source-highlight 3.1.8
 by Lorenzo Bettini
 http://www.lorenzobettini.it
-http://www.gnu.org/software/src-highlite --><tt><b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">class</font></b> HTMLRenderer <font color="#FF0000">{</font>
+http://www.gnu.org/software/src-highlite --><tt><b><font color="#0000FF">export</font></b> declare <b><font color="#0000FF">class</font></b> HTMLRenderer <font color="#FF0000">{</font>
     <i><font color="#9A1900">// the following 3 protected members are loaded with `HTMLRendererOption` in constructor.</font></i>
     <i><font color="#9A1900">// even if they're marked as protected, DO NOT override. </font></i>
     <b><font color="#0000FF">protected</font></b> _additionalHead<font color="#990000">:</font> string<font color="#990000">[];</font>
@@ -262,14 +257,12 @@ http://www.gnu.org/software/src-highlite --><tt><b><font color="#0000FF">export<
     <b><font color="#000000">preamble</font></b><font color="#990000">():</font> void<font color="#990000">;</font>
     <b><font color="#000000">postamble</font></b><font color="#990000">():</font> void<font color="#990000">;</font>
 <font color="#FF0000">}</font></tt></pre>
-
 <h4><code>PrettyPrinter</code></h4>
-
 <pre class="code code-typescript">
-<!-- Generator: GNU source-highlight 3.1.9
+<!-- Generator: GNU source-highlight 3.1.8
 by Lorenzo Bettini
 http://www.lorenzobettini.it
-http://www.gnu.org/software/src-highlite --><tt><b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">class</font></b> PrettyPrinter <font color="#FF0000">{</font>
+http://www.gnu.org/software/src-highlite --><tt><b><font color="#0000FF">export</font></b> declare <b><font color="#0000FF">class</font></b> PrettyPrinter <font color="#FF0000">{</font>
     <i><font color="#9A1900">// current result.</font></i>
     <b><font color="#0000FF">private</font></b> _res<font color="#990000">;</font>
 
@@ -292,19 +285,17 @@ http://www.gnu.org/software/src-highlite --><tt><b><font color="#0000FF">export<
     <b><font color="#000000">string</font></b><font color="#990000">(</font>x<font color="#990000">:</font> string<font color="#990000">):</font> <b><font color="#0000FF">this</font></b><font color="#990000">;</font>
 
     <i><font color="#9A1900">// this getter returns the result.</font></i>
-    <b><font color="#0000FF">get</font></b> <b><font color="#000000">result</font></b><font color="#990000">():</font> string<font color="#990000">;</font>
+    get <b><font color="#000000">result</font></b><font color="#990000">():</font> string<font color="#990000">;</font>
 
     <i><font color="#9A1900">// this method clears the result buffer.</font></i>
     <b><font color="#000000">clear</font></b><font color="#990000">():</font> void<font color="#990000">;</font>
 <font color="#FF0000">}</font></tt></pre>
-
 <h4><code>HTMLRendererOption</code></h4>
-
 <pre class="code code-typescript">
-<!-- Generator: GNU source-highlight 3.1.9
+<!-- Generator: GNU source-highlight 3.1.8
 by Lorenzo Bettini
 http://www.lorenzobettini.it
-http://www.gnu.org/software/src-highlite --><tt><b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">type</font></b> HTMLRendererOption <font color="#990000">=</font> <font color="#FF0000">{</font>
+http://www.gnu.org/software/src-highlite --><tt><b><font color="#0000FF">export</font></b> declare type HTMLRendererOption <font color="#990000">=</font> <font color="#FF0000">{</font>
     <i><font color="#9A1900">// strings that need to be inserted into the &lt;head&gt; tag.</font></i>
     additionalHead<font color="#990000">?:</font> string<font color="#990000">[];</font>
 
@@ -322,19 +313,15 @@ http://www.gnu.org/software/src-highlite --><tt><b><font color="#0000FF">export<
         doubleDash<font color="#990000">?:</font> string<font color="#990000">;</font>
     <font color="#FF0000">}</font><font color="#990000">;</font>
 <font color="#FF0000">}</font><font color="#990000">;</font>
-<b><font color="#0000FF">export</font></b> <b><font color="#0000FF">declare</font></b> <b><font color="#0000FF">class</font></b> HTMLRenderer <font color="#FF0000">{</font>
+<b><font color="#0000FF">export</font></b> declare <b><font color="#0000FF">class</font></b> HTMLRenderer <font color="#FF0000">{</font>
     <i><font color="#9A1900">// ...</font></i>
     <b><font color="#000000">constructor</font></b><font color="#990000">(</font>options<font color="#990000">?:</font> HTMLRendererOption<font color="#990000">);</font>
     <i><font color="#9A1900">// ...</font></i>
 <font color="#FF0000">}</font></tt></pre>
 
-
 <hr />
-
-<p>Last Update: 2021.12.15
-</p>
-<p><a href="index.html">Back</a>
-</p>
+<p>Last Update: 2021.12.15</p>
+<p><a href="index.html">Back</a></p>
 
 </body>
 </html>

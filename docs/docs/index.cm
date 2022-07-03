@@ -2,14 +2,16 @@
 
 + {ref(`@bctnry/camus-core` Documentation):camus-core.cm}
 
-  Current version: 0.1.8
+  Current version: 0.3.0
 #{ignore
  + {ref(`@bctnry/camus-cli` Documentation):camus-cli.cm}
 
   Current version: 0.1.3 
 #}
 
-Last Update: 2021.12.15
+As for the documentation for `camus-cli` please refer {link:https://camusmarkup.github.io/camus-cli/}.
+
+Last Update: 2022.7.4
 
 -----
 

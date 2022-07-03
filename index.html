@@ -3,51 +3,83 @@
 <head>
 <title>CamusMarkup </title><meta charset="utf-8"></meta>
 <style>
-
+    body {
+        background-color: black;
+        color: white;
+        font-family: 'Times New Roman', Times, serif;
+    }
+    a {
+        color: white;
+    }
+    a:visited {
+        color: gray;
+    }
     #taMain {
         appearance: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
         height: 100%;
         width: 50%;
+        background-color: #0000007f;
+        color: white;
+        border: 0;
+        scrollbar-color: white black;
+    }
+    ::-webkit-scrollbar {
+        background-color: black;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: white;
+    }
+    ::-webkit-scrollbar-corner {
+        background-color: black;
+        color: white;
+        border: 0;
     }
     #divDisplay {
         appearance: none;
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
         width: 50%;
         height: 100%;
         overflow: auto;
+        background-color: #0000007f;
+        scrollbar-color: white black;
+    }
+
+    main {
+        position: fixed;
+        display: flex;
+        top: 1rem;
+        left: 1rem;
+        bottom: 15rem;
+        width: 60%;
+    }
+    header {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        text-align: right;
+        font-size: 150%;
     }
 </style>
 </head>
 <body>
-
+<header>
+    <h1>Camus: A humble markup language</h1>
+    <p>Documents: <a href="./docs/index.html">./docs/index.html</a></p>
+    <p>GitHub repository: <a href="https://github.com/CamusMarkup/Camus">https://github.com/CamusMarkup/Camus</a></a></p>
+    <p>sr.ht repository: <a href="https://git.sr.ht/~bctnry/camus">https://git.sr.ht/~bctnry/camus</a></p>
+    <!-- <p>Documentation: <a href="./docs/index.html">./docs/index.html</a></p> -->
+    <p>VSCode extension: <a href="https://marketplace.visualstudio.com/items?itemName=SebastianHiggins.vscode-camus">SebastianHiggins.vscode-camus</a></p>
+</header>
+<main>
 <textarea id="taMain">
-= Camus: A humble markup language
-
-{img(logo):./camus-icon.png}
-
-Github repository: {link:https://github.com/CamusMarkup/Camus}
-
-Documentation: {link:./docs/index.html}
-
-VSCode extension: {link(SebastianHiggins.vscode-camus):https://marketplace.visualstudio.com/items?itemName=SebastianHiggins.vscode-camus}
-
-The following is demo section.
-
------
-
+    
 = Level 1 Header
 == Level 2 Header
 === Level 3 Header
 ==== Level 4 Header
 ===== Level 5 Header
 ====== Level 6 Header
+
+-----
 
 5 dash or more will be converted to horizontal ruler.
 
@@ -83,6 +115,14 @@ The following is demo section.
 > And friendly faces with put-on smiles / 
 > A drunken mind game past / 
 > Cause I'm putting the boot in tonight
+
+#{table
+  concept|unifies
+  ------
+  table-header|scopable blocks|functions, methods, closures
+  prototypes|objects, classes, namespaces, locals
+  messages|operators, calls, assigns, var access
+#}
 
 #{verbatim
     Tonight, before you lay down to the sweetness of your sleep
@@ -130,12 +170,14 @@ The following is demo section.
 [2]: blahblahbalhblah
     
 </textarea>
-<div id="divDisplay">
 
+<div id="divDisplay">
+    
 </div>
+</main>
 
 <script type="module" lang="ts">
-    import * as CamusCore from '@bctnry/camus-core';
+    import * as CamusCore from '../Camus';
 let taMain = document.getElementById('taMain');
 let divDisplay = document.getElementById('divDisplay');
 let renderer = new CamusCore.Renderer.HTMLRenderer();
@@ -148,7 +190,9 @@ taMain.addEventListener('input', (e) => {
 <noscript>
     <h1>Camus: A humble markup language</h1>
     <img src="./camus-icon.png" alt="camus logo" />
-    Github repository: <a href="https://github.com/CamusMarkup/Camus">https://github.com/CamusMarkup/Camus</a>
+    <p>Documents: <a href="./docs/index.html">./docs/index.html</a></p>
+    <p>GitHub repository: <a href="https://github.com/CamusMarkup/Camus">https://github.com/CamusMarkup/Camus</a></a></p>
+    <p>sr.ht repository: <a href="https://git.sr.ht/~bctnry/camus">https://git.sr.ht/~bctnry/camus</a></p>
 
     <h2>Sample</h2>
 
@@ -160,22 +204,57 @@ taMain.addEventListener('input', (e) => {
 ===== Level 5 Header
 ====== Level 6 Header
 
-> This beat is mine
-> You can have it
-> Just take your time
-> And do what you wanna do (And do that dance)
+-----
+
+5 dash or more will be converted to horizontal ruler.
+
+*bold* /italics/ _underline_ ~~delete~~ `inline code`
+
+{img:https://img_link} {img(alt):https://img_link}
+
+{link(Here):https://sebastian.graphics}
+
+{ref:other_cm3_file.cm3}
+
+{footnote@1}  {footnote@2}
+
+
+> Feeling My Heart Run Slow, I’m feeling like...
+> Letting my blood run cold, feeling like...
+> You told me I’ve got no soul
+> So I’m feeling like letting my heart run slow 
+
+> She keeps on calling me / 
+> I don't know where / 
+> She keeps on calling me / 
+> I don't know where / 
+> Telling me where to go / 
+> Telling me no
+
+> And head up, dear, you're shallow and blind / 
+> And head up, dear, the rabbit might die / 
+> And you say "Hi", and you say "Hi"
 > 
-> This beat is mine
-> You can have it
-> Just party down
-> And do what you wanna do (But do that dance)
+> Because I'm putting up with your constant whine / 
+> And I won't last too long / 
+> And friendly faces with put-on smiles / 
+> A drunken mind game past / 
+> Cause I'm putting the boot in tonight
+
+#{table
+  concept|unifies
+  ------
+  table-header|scopable blocks|functions, methods, closures
+  prototypes|objects, classes, namespaces, locals
+  messages|operators, calls, assigns, var access
+#}
 
 #{verbatim
     Tonight, before you lay down to the sweetness of your sleep
         Do you question your surrender to the drop from Lover's Leap
     Or does the anaesthetic darkness take hold on it's very own?
         Does your body rise in service with not one dissenting groan?
-}
+#}
 
 #{ignore
   ignored region
@@ -210,20 +289,6 @@ taMain.addEventListener('input', (e) => {
   2.  ol2
   3.  ol3
 - ulist3
-
-more than 5 dash will be converted to horizontal rule.
-
------
-
-*bold* /italics/ _underline_ ~~delete~~ `inline code`
-
-{img:https://img_link} {img(alt):https://img_link}
-
-{link(Here):https://sebastian.graphics}
-
-{ref:other_cm3_file.cm3}
-
-{footnote@1}  {footnote@2}
 
 
 [1]: blahblahblahblahblah

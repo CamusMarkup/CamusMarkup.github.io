@@ -49,11 +49,13 @@ export declare enum CamusNodeType {
     FootnoteRef = 8,
     FootnoteText = 9,
     FootnoteBlock = 10,
-    Tag = 11,
-    Image = 12,
-    List = 13,
-    ListItem = 14,
-    HorizontalRule = 15
+    Table = 11,
+    WikiTag = 12,
+    Tag = 13,
+    Image = 14,
+    List = 15,
+    ListItem = 16,
+    HorizontalRule = 17
 }
 
 // headings.
@@ -101,6 +103,14 @@ export declare type RefNode = {
     text: CamusLine;
 };
 
+// wiki node (e.g. `{wiki:wiki-page-name}`)
+// used in @bctnry/camus-cli for generating wiki pages.
+export declare type WikiTagNode = {
+    _nodeType: CamusNodeType.WikiTag;
+    name: string;
+    text: CamusLine;
+};
+
 // footnote reference (e.g. `{footnote@1}`)
 export declare type FootnoteRefNode = {
     _nodeType: CamusNodeType.FootnoteRef;
@@ -141,12 +151,18 @@ export declare type ListItemNode = {
     text: CamusLogicLine[];
 };
 
+export declare type TableNode = {
+    _nodeType: CamusNodeType.Table;
+    header: CamusLine[][];
+    body: CamusLine[][];
+};
+
 export declare type HorizontalRuleNode = {
     _nodeType: CamusNodeType.HorizontalRule;
 };
 
 // "atomic nodes" means inline nodes that will not contain other nodes.
-export declare type CamusAtomicNode = string | LinkNode | RefNode | FootnoteRefNode | InlineIgnoreNode | ImageNode | TagNode;
+export declare type CamusAtomicNode = string | LinkNode | RefNode | FootnoteRefNode | InlineIgnoreNode | ImageNode | TagNode | WikiTagNode;
 export declare function isCamusAtomicNode(x: CamusNode): x is CamusAtomicNode;
 
 export declare type CamusInlineNode = InlineStyleNode | CamusAtomicNode;
@@ -159,7 +175,7 @@ export declare type CamusLineNode = FootnoteTextNode | HeadingNode | HorizontalR
 export declare function isCamusLineNode(x: CamusNode): x is CamusLineNode;
 
 // a CamusBlockNode is a node that in source text spans multiple lines of text.
-export declare type CamusBlockNode = BlockNode | ListNode | FootnoteBlockNode;
+export declare type CamusBlockNode = BlockNode | ListNode | FootnoteBlockNode | TableNode;
 export declare function isCamusBlockNode(x: CamusNode): x is CamusBlockNode;
 
 export declare type CamusLogicLine = CamusNode[];

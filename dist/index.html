@@ -2,50 +2,91 @@
 
 <head>
 <title>CamusMarkup </title><meta charset="utf-8">
-<style>#taMain {
-        appearance: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        height: 100%;
-        width: 50%;
-    }
-    #divDisplay {
-        appearance: none;
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 50%;
-        height: 100%;
-        overflow: auto;
-    }
+<style>body {
+  color: #fff;
+  background-color: #000;
+  font-family: Times New Roman, Times, serif;
+}
+
+a {
+  color: #fff;
+}
+
+a:visited {
+  color: gray;
+}
+
+#taMain {
+  appearance: none;
+  height: 100%;
+  width: 50%;
+  color: #fff;
+  scrollbar-color: white black;
+  background-color: #0000007f;
+  border: 0;
+}
+
+::-webkit-scrollbar {
+  background-color: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #fff;
+}
+
+::-webkit-scrollbar-corner {
+  color: #fff;
+  background-color: #000;
+  border: 0;
+}
+
+#divDisplay {
+  appearance: none;
+  width: 50%;
+  height: 100%;
+  scrollbar-color: white black;
+  background-color: #0000007f;
+  overflow: auto;
+}
+
+main {
+  width: 60%;
+  display: flex;
+  position: fixed;
+  top: 1rem;
+  bottom: 15rem;
+  left: 1rem;
+}
+
+header {
+  text-align: right;
+  font-size: 150%;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}
+
 </style>
 </head>
 <body>
-
+<header>
+    <h1>Camus: A humble markup language</h1>
+    <p>GitHub repository: <a href="https://github.com/CamusMarkup/Camus">https://github.com/CamusMarkup/Camus</a></p>
+    <p>sr.ht repository: <a href="https://git.sr.ht/~bctnry/camus">https://git.sr.ht/~bctnry/camus</a></p>
+    <!-- <p>Documentation: <a href="./docs/index.html">./docs/index.html</a></p> -->
+    <p>VSCode extension: <a href="https://marketplace.visualstudio.com/items?itemName=SebastianHiggins.vscode-camus">SebastianHiggins.vscode-camus</a></p>
+</header>
+<main>
 <textarea id="taMain">
-= Camus: A humble markup language
-
-{img(logo):./camus-icon.png}
-
-Github repository: {link:https://github.com/CamusMarkup/Camus}
-
-Documentation: {link:./docs/index.html}
-
-VSCode extension: {link(SebastianHiggins.vscode-camus):https://marketplace.visualstudio.com/items?itemName=SebastianHiggins.vscode-camus}
-
-The following is demo section.
-
------
-
+    
 = Level 1 Header
 == Level 2 Header
 === Level 3 Header
 ==== Level 4 Header
 ===== Level 5 Header
 ====== Level 6 Header
+
+-----
 
 5 dash or more will be converted to horizontal ruler.
 
@@ -81,6 +122,14 @@ The following is demo section.
 > And friendly faces with put-on smiles / 
 > A drunken mind game past / 
 > Cause I'm putting the boot in tonight
+
+#{table
+  concept|unifies
+  ------
+  table-header|scopable blocks|functions, methods, closures
+  prototypes|objects, classes, namespaces, locals
+  messages|operators, calls, assigns, var access
+#}
 
 #{verbatim
     Tonight, before you lay down to the sweetness of your sleep
@@ -128,9 +177,11 @@ The following is demo section.
 [2]: blahblahbalhblah
     
 </textarea>
-<div id="divDisplay">
 
+<div id="divDisplay">
+    
 </div>
+</main>
 
 <script lang="ts">// modules are defined as an array
 // [ module function, map of requires ]
@@ -140,7 +191,7 @@ The following is demo section.
 // anything defined in a previous bundle is accessed via the
 // orig method which is the require for previous bundles
 
-(function(modules, entry, mainEntry, parcelRequireName, globalName) {
+(function (modules, entry, mainEntry, parcelRequireName, globalName) {
   /* eslint-disable no-undef */
   var globalObject =
     typeof globalThis !== 'undefined'
@@ -214,11 +265,13 @@ The following is demo section.
     return cache[name].exports;
 
     function localRequire(x) {
-      return newRequire(localRequire.resolve(x));
+      var res = localRequire.resolve(x);
+      return res === false ? {} : newRequire(res);
     }
 
     function resolve(x) {
-      return modules[name][1][x] || x;
+      var id = modules[name][1][x];
+      return id != null ? id : x;
     }
   }
 
@@ -233,9 +286,9 @@ The following is demo section.
   newRequire.modules = modules;
   newRequire.cache = cache;
   newRequire.parent = previousRequire;
-  newRequire.register = function(id, exports) {
+  newRequire.register = function (id, exports) {
     modules[id] = [
-      function(require, module) {
+      function (require, module) {
         module.exports = exports;
       },
       {},
@@ -243,7 +296,7 @@ The following is demo section.
   };
 
   Object.defineProperty(newRequire, 'root', {
-    get: function() {
+    get: function () {
       return globalObject[parcelRequireName];
     },
   });
@@ -265,7 +318,7 @@ The following is demo section.
 
       // RequireJS
     } else if (typeof define === 'function' && define.amd) {
-      define(function() {
+      define(function () {
         return mainExports;
       });
 
@@ -274,436 +327,472 @@ The following is demo section.
       this[globalName] = mainExports;
     }
   }
-})({"2QnAD":[function(require,module,exports) {
+})({"7sLH5":[function(require,module,exports) {
+"use strict";
+var global = arguments[3];
 var HMR_HOST = null;
-var HMR_PORT = 1234;
+var HMR_PORT = null;
 var HMR_SECURE = false;
-var HMR_ENV_HASH = "d751713988987e9331980363e24189ce";
-module.bundle.HMR_BUNDLE_ID = "ac23b021d5b95e93c4a0c5133ef758fa";
-// @flow
-/*global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE*/
-/*::
+var HMR_ENV_HASH = "d6ea1d42532a7575";
+module.bundle.HMR_BUNDLE_ID = "db01aaba7c28278b";
+/* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, globalThis, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
-HMRAsset,
-HMRMessage,
+  HMRAsset,
+  HMRMessage,
 } from '@parcel/reporter-dev-server/src/HMRServer.js';
 interface ParcelRequire {
-(string): mixed;
-cache: {|[string]: ParcelModule|};
-hotData: mixed;
-Module: any;
-parent: ?ParcelRequire;
-isParcelRequire: true;
-modules: {|[string]: [Function, {|[string]: string|}]|};
-HMR_BUNDLE_ID: string;
-root: ParcelRequire;
+  (string): mixed;
+  cache: {|[string]: ParcelModule|};
+  hotData: mixed;
+  Module: any;
+  parent: ?ParcelRequire;
+  isParcelRequire: true;
+  modules: {|[string]: [Function, {|[string]: string|}]|};
+  HMR_BUNDLE_ID: string;
+  root: ParcelRequire;
 }
 interface ParcelModule {
-hot: {|
-data: mixed,
-accept(cb: (Function) => void): void,
-dispose(cb: (mixed) => void): void,
-// accept(deps: Array<string> | string, cb: (Function) => void): void,
-// decline(): void,
-_acceptCallbacks: Array<(Function) => void>,
-_disposeCallbacks: Array<(mixed) => void>,
-|};
+  hot: {|
+    data: mixed,
+    accept(cb: (Function) => void): void,
+    dispose(cb: (mixed) => void): void,
+    // accept(deps: Array<string> | string, cb: (Function) => void): void,
+    // decline(): void,
+    _acceptCallbacks: Array<(Function) => void>,
+    _disposeCallbacks: Array<(mixed) => void>,
+  |};
+}
+interface ExtensionContext {
+  runtime: {|
+    reload(): void,
+    getURL(url: string): string;
+    getManifest(): {manifest_version: number, ...};
+  |};
 }
 declare var module: {bundle: ParcelRequire, ...};
 declare var HMR_HOST: string;
 declare var HMR_PORT: string;
 declare var HMR_ENV_HASH: string;
 declare var HMR_SECURE: boolean;
-*/
-var OVERLAY_ID = '__parcel__error__overlay__';
+declare var chrome: ExtensionContext;
+declare var browser: ExtensionContext;
+declare var __parcel__import__: (string) => Promise<void>;
+declare var __parcel__importScripts__: (string) => Promise<void>;
+declare var globalThis: typeof self;
+declare var ServiceWorkerGlobalScope: Object;
+*/ var OVERLAY_ID = "__parcel__error__overlay__";
 var OldModule = module.bundle.Module;
 function Module(moduleName) {
-  OldModule.call(this, moduleName);
-  this.hot = {
-    data: module.bundle.hotData,
-    _acceptCallbacks: [],
-    _disposeCallbacks: [],
-    accept: function (fn) {
-      this._acceptCallbacks.push(fn || (function () {}));
-    },
-    dispose: function (fn) {
-      this._disposeCallbacks.push(fn);
-    }
-  };
-  module.bundle.hotData = undefined;
+    OldModule.call(this, moduleName);
+    this.hot = {
+        data: module.bundle.hotData,
+        _acceptCallbacks: [],
+        _disposeCallbacks: [],
+        accept: function(fn) {
+            this._acceptCallbacks.push(fn || function() {});
+        },
+        dispose: function(fn) {
+            this._disposeCallbacks.push(fn);
+        }
+    };
+    module.bundle.hotData = undefined;
 }
 module.bundle.Module = Module;
-var checkedAssets, acceptedAssets, assetsToAccept;
+var checkedAssets, acceptedAssets, assetsToAccept /*: Array<[ParcelRequire, string]> */ ;
 function getHostname() {
-  return HMR_HOST || (location.protocol.indexOf('http') === 0 ? location.hostname : 'localhost');
+    return HMR_HOST || (location.protocol.indexOf("http") === 0 ? location.hostname : "localhost");
 }
 function getPort() {
-  return HMR_PORT || location.port;
-}
-// eslint-disable-next-line no-redeclare
+    return HMR_PORT || location.port;
+} // eslint-disable-next-line no-redeclare
 var parent = module.bundle.parent;
-if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
-  var hostname = getHostname();
-  var port = getPort();
-  var protocol = HMR_SECURE || location.protocol == 'https:' && !(/localhost|127.0.0.1|0.0.0.0/).test(hostname) ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + (port ? ':' + port : '') + '/');
-  // $FlowFixMe
-  ws.onmessage = function (event) {
-    checkedAssets = {
-      /*: {|[string]: boolean|}*/
-    };
-    acceptedAssets = {
-      /*: {|[string]: boolean|}*/
-    };
-    assetsToAccept = [];
-    var data = JSON.parse(event.data);
-    if (data.type === 'update') {
-      // Remove error overlay if there is one
-      removeErrorOverlay();
-      let assets = data.assets.filter(asset => asset.envHash === HMR_ENV_HASH);
-      // Handle HMR Update
-      var handled = false;
-      assets.forEach(asset => {
-        var didAccept = asset.type === 'css' || asset.type === 'js' && hmrAcceptCheck(module.bundle.root, asset.id, asset.depsByBundle);
-        if (didAccept) {
-          handled = true;
+if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== "undefined") {
+    var hostname = getHostname();
+    var port = getPort();
+    var protocol = HMR_SECURE || location.protocol == "https:" && !/localhost|127.0.0.1|0.0.0.0/.test(hostname) ? "wss" : "ws";
+    var ws = new WebSocket(protocol + "://" + hostname + (port ? ":" + port : "") + "/"); // Web extension context
+    var extCtx = typeof chrome === "undefined" ? typeof browser === "undefined" ? null : browser : chrome; // Safari doesn't support sourceURL in error stacks.
+    // eval may also be disabled via CSP, so do a quick check.
+    var supportsSourceURL = false;
+    try {
+        (0, eval)('throw new Error("test"); //# sourceURL=test.js');
+    } catch (err) {
+        supportsSourceURL = err.stack.includes("test.js");
+    } // $FlowFixMe
+    ws.onmessage = async function(event) {
+        checkedAssets = {} /*: {|[string]: boolean|} */ ;
+        acceptedAssets = {} /*: {|[string]: boolean|} */ ;
+        assetsToAccept = [];
+        var data = JSON.parse(event.data);
+        if (data.type === "update") {
+            // Remove error overlay if there is one
+            if (typeof document !== "undefined") removeErrorOverlay();
+            let assets = data.assets.filter((asset)=>asset.envHash === HMR_ENV_HASH); // Handle HMR Update
+            let handled = assets.every((asset)=>{
+                return asset.type === "css" || asset.type === "js" && hmrAcceptCheck(module.bundle.root, asset.id, asset.depsByBundle);
+            });
+            if (handled) {
+                console.clear(); // Dispatch custom event so other runtimes (e.g React Refresh) are aware.
+                if (typeof window !== "undefined" && typeof CustomEvent !== "undefined") window.dispatchEvent(new CustomEvent("parcelhmraccept"));
+                await hmrApplyUpdates(assets);
+                for(var i = 0; i < assetsToAccept.length; i++){
+                    var id = assetsToAccept[i][1];
+                    if (!acceptedAssets[id]) hmrAcceptRun(assetsToAccept[i][0], id);
+                }
+            } else fullReload();
         }
-      });
-      if (handled) {
-        console.clear();
-        assets.forEach(function (asset) {
-          hmrApply(module.bundle.root, asset);
-        });
-        for (var i = 0; i < assetsToAccept.length; i++) {
-          var id = assetsToAccept[i][1];
-          if (!acceptedAssets[id]) {
-            hmrAcceptRun(assetsToAccept[i][0], id);
-          }
+        if (data.type === "error") {
+            // Log parcel errors to console
+            for (let ansiDiagnostic of data.diagnostics.ansi){
+                let stack = ansiDiagnostic.codeframe ? ansiDiagnostic.codeframe : ansiDiagnostic.stack;
+                console.error("\uD83D\uDEA8 [parcel]: " + ansiDiagnostic.message + "\n" + stack + "\n\n" + ansiDiagnostic.hints.join("\n"));
+            }
+            if (typeof document !== "undefined") {
+                // Render the fancy html overlay
+                removeErrorOverlay();
+                var overlay = createErrorOverlay(data.diagnostics.html); // $FlowFixMe
+                document.body.appendChild(overlay);
+            }
         }
-      } else {
-        window.location.reload();
-      }
-    }
-    if (data.type === 'error') {
-      // Log parcel errors to console
-      for (let ansiDiagnostic of data.diagnostics.ansi) {
-        let stack = ansiDiagnostic.codeframe ? ansiDiagnostic.codeframe : ansiDiagnostic.stack;
-        console.error('🚨 [parcel]: ' + ansiDiagnostic.message + '\n' + stack + '\n\n' + ansiDiagnostic.hints.join('\n'));
-      }
-      // Render the fancy html overlay
-      removeErrorOverlay();
-      var overlay = createErrorOverlay(data.diagnostics.html);
-      // $FlowFixMe
-      document.body.appendChild(overlay);
-    }
-  };
-  ws.onerror = function (e) {
-    console.error(e.message);
-  };
-  ws.onclose = function (e) {
-    if (undefined !== 'test') {
-      console.warn('[parcel] 🚨 Connection to the HMR server was lost');
-    }
-  };
+    };
+    ws.onerror = function(e) {
+        console.error(e.message);
+    };
+    ws.onclose = function() {
+        console.warn("[parcel] \uD83D\uDEA8 Connection to the HMR server was lost");
+    };
 }
 function removeErrorOverlay() {
-  var overlay = document.getElementById(OVERLAY_ID);
-  if (overlay) {
-    overlay.remove();
-    console.log('[parcel] ✨ Error resolved');
-  }
+    var overlay = document.getElementById(OVERLAY_ID);
+    if (overlay) {
+        overlay.remove();
+        console.log("[parcel] \u2728 Error resolved");
+    }
 }
 function createErrorOverlay(diagnostics) {
-  var overlay = document.createElement('div');
-  overlay.id = OVERLAY_ID;
-  let errorHTML = '<div style="background: black; opacity: 0.85; font-size: 16px; color: white; position: fixed; height: 100%; width: 100%; top: 0px; left: 0px; padding: 30px; font-family: Menlo, Consolas, monospace; z-index: 9999;">';
-  for (let diagnostic of diagnostics) {
-    let stack = diagnostic.codeframe ? diagnostic.codeframe : diagnostic.stack;
-    errorHTML += `
+    var overlay = document.createElement("div");
+    overlay.id = OVERLAY_ID;
+    let errorHTML = '<div style="background: black; opacity: 0.85; font-size: 16px; color: white; position: fixed; height: 100%; width: 100%; top: 0px; left: 0px; padding: 30px; font-family: Menlo, Consolas, monospace; z-index: 9999;">';
+    for (let diagnostic of diagnostics){
+        let stack = diagnostic.frames.length ? diagnostic.frames.reduce((p, frame)=>{
+            return `${p}
+<a href="/__parcel_launch_editor?file=${encodeURIComponent(frame.location)}" style="text-decoration: underline; color: #888" onclick="fetch(this.href); return false">${frame.location}</a>
+${frame.code}`;
+        }, "") : diagnostic.stack;
+        errorHTML += `
       <div>
         <div style="font-size: 18px; font-weight: bold; margin-top: 20px;">
           🚨 ${diagnostic.message}
         </div>
-        <pre>
-          ${stack}
-        </pre>
+        <pre>${stack}</pre>
         <div>
-          ${diagnostic.hints.map(hint => '<div>' + hint + '</div>').join('')}
+          ${diagnostic.hints.map((hint)=>"<div>\uD83D\uDCA1 " + hint + "</div>").join("")}
         </div>
+        ${diagnostic.documentation ? `<div>📝 <a style="color: violet" href="${diagnostic.documentation}" target="_blank">Learn more</a></div>` : ""}
       </div>
     `;
-  }
-  errorHTML += '</div>';
-  overlay.innerHTML = errorHTML;
-  return overlay;
-}
-function getParents(bundle, id) /*: Array<[ParcelRequire, string]>*/
-{
-  var modules = bundle.modules;
-  if (!modules) {
-    return [];
-  }
-  var parents = [];
-  var k, d, dep;
-  for (k in modules) {
-    for (d in modules[k][1]) {
-      dep = modules[k][1][d];
-      if (dep === id || Array.isArray(dep) && dep[dep.length - 1] === id) {
-        parents.push([bundle, k]);
-      }
     }
-  }
-  if (bundle.parent) {
-    parents = parents.concat(getParents(bundle.parent, id));
-  }
-  return parents;
+    errorHTML += "</div>";
+    overlay.innerHTML = errorHTML;
+    return overlay;
+}
+function fullReload() {
+    if ("reload" in location) location.reload();
+    else if (extCtx && extCtx.runtime && extCtx.runtime.reload) extCtx.runtime.reload();
+}
+function getParents(bundle, id) /*: Array<[ParcelRequire, string]> */ {
+    var modules = bundle.modules;
+    if (!modules) return [];
+    var parents = [];
+    var k, d, dep;
+    for(k in modules)for(d in modules[k][1]){
+        dep = modules[k][1][d];
+        if (dep === id || Array.isArray(dep) && dep[dep.length - 1] === id) parents.push([
+            bundle,
+            k
+        ]);
+    }
+    if (bundle.parent) parents = parents.concat(getParents(bundle.parent, id));
+    return parents;
 }
 function updateLink(link) {
-  var newLink = link.cloneNode();
-  newLink.onload = function () {
-    if (link.parentNode !== null) {
-      // $FlowFixMe
-      link.parentNode.removeChild(link);
-    }
-  };
-  newLink.setAttribute('href', // $FlowFixMe
-  link.getAttribute('href').split('?')[0] + '?' + Date.now());
-  // $FlowFixMe
-  link.parentNode.insertBefore(newLink, link.nextSibling);
+    var newLink = link.cloneNode();
+    newLink.onload = function() {
+        if (link.parentNode !== null) // $FlowFixMe
+        link.parentNode.removeChild(link);
+    };
+    newLink.setAttribute("href", link.getAttribute("href").split("?")[0] + "?" + Date.now()); // $FlowFixMe
+    link.parentNode.insertBefore(newLink, link.nextSibling);
 }
 var cssTimeout = null;
 function reloadCSS() {
-  if (cssTimeout) {
-    return;
-  }
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
-    for (var i = 0; i < links.length; i++) {
-      // $FlowFixMe[incompatible-type]
-      var href = links[i].getAttribute('href');
-      var hostname = getHostname();
-      var servedFromHMRServer = hostname === 'localhost' ? new RegExp('^(https?:\\/\\/(0.0.0.0|127.0.0.1)|localhost):' + getPort()).test(href) : href.indexOf(hostname + ':' + getPort());
-      var absolute = (/^https?:\/\//i).test(href) && href.indexOf(window.location.origin) !== 0 && !servedFromHMRServer;
-      if (!absolute) {
-        updateLink(links[i]);
-      }
+    if (cssTimeout) return;
+    cssTimeout = setTimeout(function() {
+        var links = document.querySelectorAll('link[rel="stylesheet"]');
+        for(var i = 0; i < links.length; i++){
+            // $FlowFixMe[incompatible-type]
+            var href = links[i].getAttribute("href");
+            var hostname = getHostname();
+            var servedFromHMRServer = hostname === "localhost" ? new RegExp("^(https?:\\/\\/(0.0.0.0|127.0.0.1)|localhost):" + getPort()).test(href) : href.indexOf(hostname + ":" + getPort());
+            var absolute = /^https?:\/\//i.test(href) && href.indexOf(location.origin) !== 0 && !servedFromHMRServer;
+            if (!absolute) updateLink(links[i]);
+        }
+        cssTimeout = null;
+    }, 50);
+}
+function hmrDownload(asset) {
+    if (asset.type === "js") {
+        if (typeof document !== "undefined") {
+            let script = document.createElement("script");
+            script.src = asset.url + "?t=" + Date.now();
+            if (asset.outputFormat === "esmodule") script.type = "module";
+            return new Promise((resolve, reject)=>{
+                var _document$head;
+                script.onload = ()=>resolve(script);
+                script.onerror = reject;
+                (_document$head = document.head) === null || _document$head === void 0 || _document$head.appendChild(script);
+            });
+        } else if (typeof importScripts === "function") {
+            // Worker scripts
+            if (asset.outputFormat === "esmodule") return import(asset.url + "?t=" + Date.now());
+            else return new Promise((resolve, reject)=>{
+                try {
+                    importScripts(asset.url + "?t=" + Date.now());
+                    resolve();
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        }
     }
-    cssTimeout = null;
-  }, 50);
+}
+async function hmrApplyUpdates(assets) {
+    global.parcelHotUpdate = Object.create(null);
+    let scriptsToRemove;
+    try {
+        // If sourceURL comments aren't supported in eval, we need to load
+        // the update from the dev server over HTTP so that stack traces
+        // are correct in errors/logs. This is much slower than eval, so
+        // we only do it if needed (currently just Safari).
+        // https://bugs.webkit.org/show_bug.cgi?id=137297
+        // This path is also taken if a CSP disallows eval.
+        if (!supportsSourceURL) {
+            let promises = assets.map((asset)=>{
+                var _hmrDownload;
+                return (_hmrDownload = hmrDownload(asset)) === null || _hmrDownload === void 0 ? void 0 : _hmrDownload.catch((err)=>{
+                    // Web extension bugfix for Chromium
+                    // https://bugs.chromium.org/p/chromium/issues/detail?id=1255412#c12
+                    if (extCtx && extCtx.runtime && extCtx.runtime.getManifest().manifest_version == 3) {
+                        if (typeof ServiceWorkerGlobalScope != "undefined" && global instanceof ServiceWorkerGlobalScope) {
+                            extCtx.runtime.reload();
+                            return;
+                        }
+                        asset.url = extCtx.runtime.getURL("/__parcel_hmr_proxy__?url=" + encodeURIComponent(asset.url + "?t=" + Date.now()));
+                        return hmrDownload(asset);
+                    }
+                    throw err;
+                });
+            });
+            scriptsToRemove = await Promise.all(promises);
+        }
+        assets.forEach(function(asset) {
+            hmrApply(module.bundle.root, asset);
+        });
+    } finally{
+        delete global.parcelHotUpdate;
+        if (scriptsToRemove) scriptsToRemove.forEach((script)=>{
+            if (script) {
+                var _document$head2;
+                (_document$head2 = document.head) === null || _document$head2 === void 0 || _document$head2.removeChild(script);
+            }
+        });
+    }
 }
 function hmrApply(bundle, asset) {
-  var modules = bundle.modules;
-  if (!modules) {
-    return;
-  }
-  if (asset.type === 'css') {
-    reloadCSS();
-    return;
-  }
-  let deps = asset.depsByBundle[bundle.HMR_BUNDLE_ID];
-  if (deps) {
-    var fn = new Function('require', 'module', 'exports', asset.output);
-    modules[asset.id] = [fn, deps];
-  } else if (bundle.parent) {
-    hmrApply(bundle.parent, asset);
-  }
+    var modules = bundle.modules;
+    if (!modules) return;
+    if (asset.type === "css") reloadCSS();
+    else if (asset.type === "js") {
+        let deps = asset.depsByBundle[bundle.HMR_BUNDLE_ID];
+        if (deps) {
+            if (modules[asset.id]) {
+                // Remove dependencies that are removed and will become orphaned.
+                // This is necessary so that if the asset is added back again, the cache is gone, and we prevent a full page reload.
+                let oldDeps = modules[asset.id][1];
+                for(let dep in oldDeps)if (!deps[dep] || deps[dep] !== oldDeps[dep]) {
+                    let id = oldDeps[dep];
+                    let parents = getParents(module.bundle.root, id);
+                    if (parents.length === 1) hmrDelete(module.bundle.root, id);
+                }
+            }
+            if (supportsSourceURL) // Global eval. We would use `new Function` here but browser
+            // support for source maps is better with eval.
+            (0, eval)(asset.output);
+             // $FlowFixMe
+            let fn = global.parcelHotUpdate[asset.id];
+            modules[asset.id] = [
+                fn,
+                deps
+            ];
+        } else if (bundle.parent) hmrApply(bundle.parent, asset);
+    }
+}
+function hmrDelete(bundle, id1) {
+    let modules = bundle.modules;
+    if (!modules) return;
+    if (modules[id1]) {
+        // Collect dependencies that will become orphaned when this module is deleted.
+        let deps = modules[id1][1];
+        let orphans = [];
+        for(let dep in deps){
+            let parents = getParents(module.bundle.root, deps[dep]);
+            if (parents.length === 1) orphans.push(deps[dep]);
+        } // Delete the module. This must be done before deleting dependencies in case of circular dependencies.
+        delete modules[id1];
+        delete bundle.cache[id1]; // Now delete the orphans.
+        orphans.forEach((id)=>{
+            hmrDelete(module.bundle.root, id);
+        });
+    } else if (bundle.parent) hmrDelete(bundle.parent, id1);
 }
 function hmrAcceptCheck(bundle, id, depsByBundle) {
-  var modules = bundle.modules;
-  if (!modules) {
-    return;
-  }
-  if (depsByBundle && !depsByBundle[bundle.HMR_BUNDLE_ID]) {
-    // If we reached the root bundle without finding where the asset should go,
-    // there's nothing to do. Mark as "accepted" so we don't reload the page.
-    if (!bundle.parent) {
-      return true;
+    if (hmrAcceptCheckOne(bundle, id, depsByBundle)) return true;
+     // Traverse parents breadth first. All possible ancestries must accept the HMR update, or we'll reload.
+    let parents = getParents(module.bundle.root, id);
+    let accepted = false;
+    while(parents.length > 0){
+        let v = parents.shift();
+        let a = hmrAcceptCheckOne(v[0], v[1], null);
+        if (a) // If this parent accepts, stop traversing upward, but still consider siblings.
+        accepted = true;
+        else {
+            // Otherwise, queue the parents in the next level upward.
+            let p = getParents(module.bundle.root, v[1]);
+            if (p.length === 0) {
+                // If there are no parents, then we've reached an entry without accepting. Reload.
+                accepted = false;
+                break;
+            }
+            parents.push(...p);
+        }
     }
-    return hmrAcceptCheck(bundle.parent, id, depsByBundle);
-  }
-  if (checkedAssets[id]) {
-    return;
-  }
-  checkedAssets[id] = true;
-  var cached = bundle.cache[id];
-  assetsToAccept.push([bundle, id]);
-  if (cached && cached.hot && cached.hot._acceptCallbacks.length) {
-    return true;
-  }
-  return getParents(module.bundle.root, id).some(function (v) {
-    return hmrAcceptCheck(v[0], v[1], null);
-  });
+    return accepted;
+}
+function hmrAcceptCheckOne(bundle, id, depsByBundle) {
+    var modules = bundle.modules;
+    if (!modules) return;
+    if (depsByBundle && !depsByBundle[bundle.HMR_BUNDLE_ID]) {
+        // If we reached the root bundle without finding where the asset should go,
+        // there's nothing to do. Mark as "accepted" so we don't reload the page.
+        if (!bundle.parent) return true;
+        return hmrAcceptCheck(bundle.parent, id, depsByBundle);
+    }
+    if (checkedAssets[id]) return true;
+    checkedAssets[id] = true;
+    var cached = bundle.cache[id];
+    assetsToAccept.push([
+        bundle,
+        id
+    ]);
+    if (!cached || cached.hot && cached.hot._acceptCallbacks.length) return true;
 }
 function hmrAcceptRun(bundle, id) {
-  var cached = bundle.cache[id];
-  bundle.hotData = {};
-  if (cached && cached.hot) {
-    cached.hot.data = bundle.hotData;
-  }
-  if (cached && cached.hot && cached.hot._disposeCallbacks.length) {
-    cached.hot._disposeCallbacks.forEach(function (cb) {
-      cb(bundle.hotData);
+    var cached = bundle.cache[id];
+    bundle.hotData = {};
+    if (cached && cached.hot) cached.hot.data = bundle.hotData;
+    if (cached && cached.hot && cached.hot._disposeCallbacks.length) cached.hot._disposeCallbacks.forEach(function(cb) {
+        cb(bundle.hotData);
     });
-  }
-  delete bundle.cache[id];
-  bundle(id);
-  cached = bundle.cache[id];
-  if (cached && cached.hot && cached.hot._acceptCallbacks.length) {
-    cached.hot._acceptCallbacks.forEach(function (cb) {
-      var assetsToAlsoAccept = cb(function () {
-        return getParents(module.bundle.root, id);
-      });
-      if (assetsToAlsoAccept && assetsToAccept.length) {
+    delete bundle.cache[id];
+    bundle(id);
+    cached = bundle.cache[id];
+    if (cached && cached.hot && cached.hot._acceptCallbacks.length) cached.hot._acceptCallbacks.forEach(function(cb) {
+        var assetsToAlsoAccept = cb(function() {
+            return getParents(module.bundle.root, id);
+        });
+        if (assetsToAlsoAccept && assetsToAccept.length) // $FlowFixMe[method-unbinding]
         assetsToAccept.push.apply(assetsToAccept, assetsToAlsoAccept);
-      }
     });
-  }
-  acceptedAssets[id] = true;
+    acceptedAssets[id] = true;
 }
 
-},{}],"vLDcy":[function(require,module,exports) {
-var _bctnryCamusCore = require('@bctnry/camus-core');
-let taMain = document.getElementById('taMain');
-let divDisplay = document.getElementById('divDisplay');
-let renderer = new _bctnryCamusCore.Renderer.HTMLRenderer();
-divDisplay.innerHTML = renderer.render(_bctnryCamusCore.Parser.parse(taMain.value));
-taMain.addEventListener('input', e => {
-  divDisplay.innerHTML = renderer.render(_bctnryCamusCore.Parser.parse(taMain.value));
+},{}],"5yJrP":[function(require,module,exports) {
+var _camus = require("../Camus");
+let taMain = document.getElementById("taMain");
+let divDisplay = document.getElementById("divDisplay");
+let renderer = new _camus.Renderer.HTMLRenderer();
+divDisplay.innerHTML = renderer.render(_camus.Parser.parse(taMain.value));
+taMain.addEventListener("input", (e)=>{
+    divDisplay.innerHTML = renderer.render(_camus.Parser.parse(taMain.value));
 });
 
-},{"@bctnry/camus-core":"1jiwc"}],"1jiwc":[function(require,module,exports) {
+},{"../Camus":"i2m2Z"}],"i2m2Z":[function(require,module,exports) {
 "use strict";
-var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  Object.defineProperty(o, k2, {
-    enumerable: true,
-    get: function () {
-      return m[k];
+var __createBinding = this && this.__createBinding || (Object.create ? function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, {
+        enumerable: true,
+        get: function() {
+            return m[k];
+        }
+    });
+} : function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+});
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function(o, v) {
+    Object.defineProperty(o, "default", {
+        enumerable: true,
+        value: v
+    });
+} : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = this && this.__importStar || function(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) {
+        for(var k in mod)if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     }
-  });
-} : function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  o[k2] = m[k];
-});
-var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
-  Object.defineProperty(o, "default", {
-    enumerable: true,
-    value: v
-  });
-} : function (o, v) {
-  o["default"] = v;
-});
-var __importStar = this && this.__importStar || (function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-  __setModuleDefault(result, mod);
-  return result;
-});
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.Renderer = exports.Parser = exports.AST = void 0;
 exports.AST = __importStar(require("./AST"));
 exports.Parser = __importStar(require("./Parser"));
 exports.Renderer = __importStar(require("./Renderer"));
-const Parser = __importStar(require("./Parser"));
-let a = Parser.parse(`
 
-= TrulyVisual
-
-== Example
-
-#{code trulyvisual
-    Nick became so angry that he just couldn't help yelling at Victor in the end:
-    {char(20):I told you that this will happen...}
-    {wait(2/3),word:I TOLD YOU THAT {whole,shake(strong,1):THIS COULD HAPPEN!!}}
-    {char(70):THE MACHINE HAS BROKEN DOWN LIKE 30 MINUTES AGO!!
-      {wait} WHERE IN {speed(50):THE FLYING FVCK} HAVE YOU BEEN?!}
-#}
-
-== Reference
-
-=== \`by\` command
-
-These commands control how to display the text.
-
-+ \`<by>\`: the raw \`by\` command.
-+ \`<by-char>\`: display the content character by character. Equivalent to \`<by type=char>\`.
-+ \`<by-word>\`: display the content word by word, separated by characters that are normally used to separate words. Equivalent to \`<by type=word>\`
-+ \`<by-whole>\`: display the content as a whole. Equivalent to \`<by type=whole>\`
-
-These commands are cancelled with \`</by>\`.
-
-These commands take the following arguments:
-
-+ \`speed=[speed]\`: control the displaying speed. Only affects \`<by-char>\` and \`<by-word>\`. \`speed=100\` is defined to be display each subject (a character in \`<by-char>\`, a word in \`<by-word>\`) in the timespan of 10ms.
-
-\`by\` commands are "on-hold", meaning their effects lasts after completing the execution.
-
-=== \`wait\`
-
-\`<wait>\` 
-
-\`wait\` is "immediate" command, 
-
-=== Visual effect
-
-+ \`shake\`: shake the content of the current \`by\` block.
-  + \`intensity\` (\`mild\`|\`normal\`|\`strong\`): the intensity.
-+ \`fade-in\`: fade in.
-  + \`time\`: time.
-+ \`fade-out\`: fade out.
-  + \`time\`: time.
-+ \`blink\`: blinking.
-  + \`time\`: time.
-  
-
-=== Modifiers
-
-
-== EBNF
-
-\`\`\`
-Document ::= (Tag | Text)*
-Text = ([^\<>]|\(\|&|<|>|=[0-9]*))+
-Tag ::= CommandTag | CloseTag
-CommandTag ::= "<" TagIdentifier? Modifier* ">"
-TagIdentifier = [^<>.="' ]+
-Modifier ::= ModifierIdentifier "=" Value
-ModifierIdentifier ::= (TagIdentifier ".")? AtomicModifierIdentifier
-AtomicModifierIdentifier = [^<>.="' ]+
-Value = ([^\<>=]|\(\|<|>|=|=[0-9]*))+
-CloseTag ::= "</" TagIdentifier ">"
-\`\`\`
-
-
-`);
-
-},{"./AST":"5RikK","./Parser":"7xEoP","./Renderer":"6MBKk"}],"5RikK":[function(require,module,exports) {
+},{"./AST":"dTKef","./Parser":"96ASZ","./Renderer":"6J4V1"}],"dTKef":[function(require,module,exports) {
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.isCamusBlockNode = exports.isCamusLineNode = exports.isCamusInlineNode = exports.isCamusAtomicNode = exports.CamusNodeType = void 0;
 var CamusNodeType;
-(function (CamusNodeType) {
-    CamusNodeType[CamusNodeType["Heading"] = 1] = "Heading";
-    CamusNodeType[CamusNodeType["Block"] = 2] = "Block";
-    CamusNodeType[CamusNodeType["InlineStyle"] = 3] = "InlineStyle";
-    CamusNodeType[CamusNodeType["InlineCode"] = 4] = "InlineCode";
-    CamusNodeType[CamusNodeType["InlineIgnore"] = 5] = "InlineIgnore";
-    CamusNodeType[CamusNodeType["Link"] = 6] = "Link";
-    CamusNodeType[CamusNodeType["Ref"] = 7] = "Ref";
-    CamusNodeType[CamusNodeType["FootnoteRef"] = 8] = "FootnoteRef";
-    CamusNodeType[CamusNodeType["FootnoteText"] = 9] = "FootnoteText";
-    CamusNodeType[CamusNodeType["FootnoteBlock"] = 10] = "FootnoteBlock";
-    CamusNodeType[CamusNodeType["Tag"] = 11] = "Tag";
-    CamusNodeType[CamusNodeType["Image"] = 12] = "Image";
-    CamusNodeType[CamusNodeType["List"] = 13] = "List";
-    CamusNodeType[CamusNodeType["ListItem"] = 14] = "ListItem";
-    CamusNodeType[CamusNodeType["HorizontalRule"] = 15] = "HorizontalRule";
+(function(CamusNodeType1) {
+    CamusNodeType1[CamusNodeType1["Heading"] = 1] = "Heading";
+    CamusNodeType1[CamusNodeType1["Block"] = 2] = "Block";
+    CamusNodeType1[CamusNodeType1["InlineStyle"] = 3] = "InlineStyle";
+    CamusNodeType1[CamusNodeType1["InlineCode"] = 4] = "InlineCode";
+    CamusNodeType1[CamusNodeType1["InlineIgnore"] = 5] = "InlineIgnore";
+    CamusNodeType1[CamusNodeType1["Link"] = 6] = "Link";
+    CamusNodeType1[CamusNodeType1["Ref"] = 7] = "Ref";
+    CamusNodeType1[CamusNodeType1["FootnoteRef"] = 8] = "FootnoteRef";
+    CamusNodeType1[CamusNodeType1["FootnoteText"] = 9] = "FootnoteText";
+    CamusNodeType1[CamusNodeType1["FootnoteBlock"] = 10] = "FootnoteBlock";
+    CamusNodeType1[CamusNodeType1["Table"] = 11] = "Table";
+    CamusNodeType1[CamusNodeType1["WikiTag"] = 12] = "WikiTag";
+    CamusNodeType1[CamusNodeType1["Tag"] = 13] = "Tag";
+    CamusNodeType1[CamusNodeType1["Image"] = 14] = "Image";
+    CamusNodeType1[CamusNodeType1["List"] = 15] = "List";
+    CamusNodeType1[CamusNodeType1["ListItem"] = 16] = "ListItem";
+    CamusNodeType1[CamusNodeType1["HorizontalRule"] = 17] = "HorizontalRule";
 })(CamusNodeType = exports.CamusNodeType || (exports.CamusNodeType = {}));
 function isCamusAtomicNode(x) {
-    return typeof x === 'string' || [
+    return typeof x === "string" || [
         CamusNodeType.Link,
         CamusNodeType.Ref,
         CamusNodeType.FootnoteRef,
@@ -711,6 +800,7 @@ function isCamusAtomicNode(x) {
         CamusNodeType.InlineIgnore,
         CamusNodeType.Image,
         CamusNodeType.Tag,
+        CamusNodeType.WikiTag, 
     ].includes(x._nodeType);
 }
 exports.isCamusAtomicNode = isCamusAtomicNode;
@@ -721,44 +811,56 @@ function isCamusInlineNode(x) {
 }
 exports.isCamusInlineNode = isCamusInlineNode;
 function isCamusLineNode(x) {
-    return typeof x !== 'string' && [
+    return typeof x !== "string" && [
         CamusNodeType.FootnoteText,
         CamusNodeType.Heading,
-        CamusNodeType.HorizontalRule,
+        CamusNodeType.HorizontalRule, 
     ].includes(x._nodeType);
 }
 exports.isCamusLineNode = isCamusLineNode;
 function isCamusBlockNode(x) {
-    return typeof x !== 'string' && [
+    return typeof x !== "string" && [
         CamusNodeType.Block,
         CamusNodeType.List,
-        CamusNodeType.FootnoteBlock,
+        CamusNodeType.FootnoteBlock, 
     ].includes(x._nodeType);
 }
 exports.isCamusBlockNode = isCamusBlockNode;
 
-},{}],"7xEoP":[function(require,module,exports) {
+},{}],"96ASZ":[function(require,module,exports) {
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+var __createBinding = this && this.__createBinding || (Object.create ? function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
+    Object.defineProperty(o, k2, {
+        enumerable: true,
+        get: function() {
+            return m[k];
+        }
+    });
+} : function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
+});
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function(o, v) {
+    Object.defineProperty(o, "default", {
+        enumerable: true,
+        value: v
+    });
+} : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
+var __importStar = this && this.__importStar || function(mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) {
+        for(var k in mod)if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    }
     __setModuleDefault(result, mod);
     return result;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.parse = void 0;
 const Assert_1 = require("./Assert");
 const ast = __importStar(require("./AST"));
@@ -766,9 +868,7 @@ const REGEX_BRACE_TAG = /^\{([a-zA-Z0-9]+)(?:\(((?:\\\)|[^)])*)\))?:((?:\\\}|[^}
 const REGEX_FOOTNOTE_TAG = /^\{footnote@((?:\\\}|\\\]|[^}\]\s])*)\}/;
 const REGEX_HASH_TAG = /^\{#((?:\\\}|[^}])*)\}/;
 function _checkIfSpecialTreatmentRequiredInline(x) {
-    return !!(REGEX_BRACE_TAG.exec(x)
-        || REGEX_FOOTNOTE_TAG.exec(x)
-        || REGEX_HASH_TAG.exec(x));
+    return !!(REGEX_BRACE_TAG.exec(x) || REGEX_FOOTNOTE_TAG.exec(x) || REGEX_HASH_TAG.exec(x));
 }
 /*
 
@@ -801,55 +901,68 @@ normal *bold _boldu ~~budelete~~ boldu __ bold*
         take until style char.
         push in stash.
         continue.
-*/
-// NOTE: requires x to have only one single line.
-function _parseInline(x) {
+*/ // NOTE: requires x to have only one single line.
+function _parseInline(x1) {
     let matchres;
-    let subj = x;
+    let subj = x1;
     let stash = [];
     let stack = [];
-    let _StashPush = (x) => {
+    let _StashPush = (x)=>{
         let stashTop = stash[stash.length - 1];
-        if (Array.isArray(stashTop)) {
-            stashTop.push(x);
-        }
-        else {
-            stash.push(x);
-        }
+        if (Array.isArray(stashTop)) stashTop.push(x);
+        else stash.push(x);
     };
-    while (subj) {
+    while(subj){
         if (matchres = REGEX_FOOTNOTE_TAG.exec(subj)) {
-            _StashPush({ _nodeType: ast.CamusNodeType.FootnoteRef, id: matchres[1] });
+            _StashPush({
+                _nodeType: ast.CamusNodeType.FootnoteRef,
+                id: matchres[1]
+            });
             subj = subj.substring(matchres[0].length);
-        }
-        else if (matchres = REGEX_HASH_TAG.exec(subj)) {
-            _StashPush({ _nodeType: ast.CamusNodeType.Tag, id: matchres[1] });
+        } else if (matchres = REGEX_HASH_TAG.exec(subj)) {
+            _StashPush({
+                _nodeType: ast.CamusNodeType.Tag,
+                id: matchres[1]
+            });
             subj = subj.substring(matchres[0].length);
-        }
-        else if (matchres = REGEX_BRACE_TAG.exec(subj)) {
-            switch (matchres[1]) {
-                case 'link': {
-                    _StashPush({ _nodeType: ast.CamusNodeType.Link, url: matchres[3] || '', text: _parseInline(matchres[2] || '') });
+        } else if (matchres = REGEX_BRACE_TAG.exec(subj)) {
+            switch(matchres[1]){
+                case "link":
+                    _StashPush({
+                        _nodeType: ast.CamusNodeType.Link,
+                        url: matchres[3] || "",
+                        text: _parseInline(matchres[2] || "")
+                    });
                     break;
-                }
-                case 'img': {
-                    _StashPush({ _nodeType: ast.CamusNodeType.Image, url: matchres[3] || '', alt: matchres[2] || '' });
+                case "img":
+                    _StashPush({
+                        _nodeType: ast.CamusNodeType.Image,
+                        url: matchres[3] || "",
+                        alt: (matchres[2] || "").replace(/\\(.)/g, "$1")
+                    });
                     break;
-                }
-                case 'ref': {
-                    _StashPush({ _nodeType: ast.CamusNodeType.Ref, path: matchres[3] || '', text: _parseInline(matchres[2] || '') });
+                case "ref":
+                    _StashPush({
+                        _nodeType: ast.CamusNodeType.Ref,
+                        path: matchres[3] || "",
+                        text: _parseInline(matchres[2] || "")
+                    });
                     break;
-                }
-                default: {
+                case "wiki":
+                    _StashPush({
+                        _nodeType: ast.CamusNodeType.WikiTag,
+                        name: matchres[3] || "",
+                        text: _parseInline(matchres[2] || "")
+                    });
+                    break;
+                default:
                     _StashPush(matchres[0]);
                     break;
-                }
             }
             subj = subj.substring(matchres[0].length);
-        }
-        else {
-            if ('*/_`'.includes(subj[0]) || subj.startsWith('~~')) {
-                if (stack.includes(subj[0]) || (subj.startsWith('~~') && stack.includes('~~'))) {
+        } else {
+            if ("*/_`".includes(subj[0]) || subj.startsWith("~~")) {
+                if (stack.includes(subj[0]) || subj.startsWith("~~") && stack.includes("~~")) {
                     // x[0] in stack.
                     // NOTE: now there's a problem. if we have an input like this:
                     //     *_bold underline*_
@@ -878,53 +991,51 @@ function _parseInline(x) {
                     //     stack=[*]
                     // which then we follow the normal procedure.
                     let rewindStash = [];
-                    while ((subj.startsWith('~~') && stack[stack.length - 1] && stack[stack.length - 1] !== '~~')
-                        || (!subj.startsWith('~~') && stack[stack.length - 1] && (stack[stack.length - 1] !== subj[0]))) {
+                    while(subj.startsWith("~~") && stack[stack.length - 1] && stack[stack.length - 1] !== "~~" || !subj.startsWith("~~") && stack[stack.length - 1] && stack[stack.length - 1] !== subj[0]){
                         let stashTop = stash.pop();
                         rewindStash = [
                             stack.pop(),
-                            ...(Array.isArray(stashTop) ? stashTop : [stashTop]),
+                            ...Array.isArray(stashTop) ? stashTop : [
+                                stashTop
+                            ],
                             ...rewindStash
                         ];
                     }
                     let stashTop = stash[stash.length - 1];
-                    (0, Assert_1.ASSERT)('stashTop should an array.', Array.isArray(stashTop));
-                    stash[stash.length - 1] = [...stashTop, ...rewindStash];
+                    (0, Assert_1.ASSERT)("stashTop should an array.", Array.isArray(stashTop));
+                    stash[stash.length - 1] = [
+                        ...stashTop,
+                        ...rewindStash
+                    ];
                     // now we resolve stack top:
                     let styleArray = [];
                     let s = stack.pop();
-                    styleArray.push(s === '*' ? 'bold'
-                        : s === '/' ? 'italics'
-                            : s === '_' ? 'underline'
-                                : s === '`' ? 'code'
-                                    : 'delete');
+                    styleArray.push(s === "*" ? "bold" : s === "/" ? "italics" : s === "_" ? "underline" : s === "`" ? "code" : "delete");
                     let lastStashTop = stash.pop();
-                    let newNode = { _nodeType: ast.CamusNodeType.InlineStyle, style: styleArray, text: lastStashTop };
+                    let newNode = {
+                        _nodeType: ast.CamusNodeType.InlineStyle,
+                        style: styleArray,
+                        text: lastStashTop
+                    };
                     _StashPush(newNode);
-                    subj = subj.substring(subj.startsWith('~~') ? 2 : 1);
-                }
-                else {
+                    subj = subj.substring(subj.startsWith("~~") ? 2 : 1);
+                } else {
                     // x[0] not in stack.
                     stash.push([]);
-                    stack.push(subj.startsWith('~~') ? '~~' : subj[0]);
-                    subj = subj.substring(subj.startsWith('~~') ? 2 : 1);
+                    stack.push(subj.startsWith("~~") ? "~~" : subj[0]);
+                    subj = subj.substring(subj.startsWith("~~") ? 2 : 1);
                 }
-            }
-            else if (subj[0] === '\\') {
-                if (subj[1] && '*/_`~{`'.includes(subj[1])) {
+            } else if (subj[0] === "\\") {
+                if (subj[1]) {
                     _StashPush(subj[1]);
                     subj = subj.substring(2);
-                }
-                else {
+                } else {
                     _StashPush(subj[0]);
                     subj = subj.substring(1);
                 }
-            }
-            else {
+            } else {
                 let i = 0;
-                while (subj[i] && !'*/_~`\\'.includes(subj[i]) && !_checkIfSpecialTreatmentRequiredInline(subj.substring(i))) {
-                    i++;
-                }
+                while(subj[i] && (!"*/_~`\\".includes(subj[i]) || subj[i] === "~" && subj[i + 1] !== "~") && !_checkIfSpecialTreatmentRequiredInline(subj.substring(i)))i++;
                 _StashPush(subj.substring(0, i));
                 subj = subj.substring(i);
             }
@@ -933,18 +1044,20 @@ function _parseInline(x) {
     // NOTE: there shouldn't be any inline style left at the end of the line.
     // if there is, we need to rewind just like above.
     let rewindStash = [];
-    while (stack.length > 0) {
+    while(stack.length > 0){
         let stashTop = stash.pop();
         rewindStash = [
             stack.pop(),
-            ...(Array.isArray(stashTop) ? stashTop : [stashTop]),
+            ...Array.isArray(stashTop) ? stashTop : [
+                stashTop
+            ],
             ...rewindStash
         ];
     }
     // Now there shouldn't be any array in the stash.
-    (0, Assert_1.ASSERT)('at the end of finishing rewind stash should not contain array', !rewindStash.map((v) => Array.isArray(v)).reduce((a, b) => a || b, false));
+    (0, Assert_1.ASSERT)("at the end of finishing rewind stash should not contain array", !rewindStash.map((v)=>Array.isArray(v)).reduce((a, b)=>a || b, false));
     stash = stash.concat(rewindStash);
-    (0, Assert_1.ASSERT)('at the end of _parseInline stash should be an ast.CamusLine', stash.map((v) => ast.isCamusInlineNode(v)).reduce((a, b) => a && b, true));
+    (0, Assert_1.ASSERT)("at the end of _parseInline stash should be an ast.CamusLine", stash.map((v)=>ast.isCamusInlineNode(v)).reduce((a, b)=>a && b, true));
     return stash;
 }
 // NOTE:
@@ -992,101 +1105,137 @@ const REGEX_BLOCK_END = /^#\}/;
 const REGEX_UNORDERED_LIST_HEAD = /^(([\+-])(\s+))(.*)/;
 const REGEX_ORDERED_LIST_HEAD = /^(([0-9]+)\.(\s+))(.*)/;
 const REGEX_TRIM_LEFT = /^(\s*)/;
+const REGEX_TABLE_CELL = /^((?:\\\||[^|])*)(\|)?/;
 const VERBATIM_BLOCK_TYPES = [
-    'verbatim',
-    'code',
-    'ignore',
+    "verbatim",
+    "code",
+    "ignore",
+    "raw"
 ];
+function _splitTableCell(x) {
+    let res = [];
+    let subj = x;
+    while(subj.length > 0){
+        let matchres = REGEX_TABLE_CELL.exec(subj);
+        if (!matchres) {
+            res.push(subj);
+            break;
+        }
+        res.push(matchres[1]);
+        subj = subj.substring(matchres[0].length);
+    }
+    return res;
+}
 function _checkIfSpecialTreatmentRequired(x) {
-    return !!(REGEX_HEADING.exec(x)
-        || REGEX_FOOTNOTE_TEXT.exec(x)
-        || REGEX_HORIZONTAL_RULE.exec(x)
-        || REGEX_QUOTE.exec(x)
-        || REGEX_BLOCK_START.exec(x)
-        || REGEX_BLOCK_END.exec(x)
-        || REGEX_UNORDERED_LIST_HEAD.exec(x)
-        || REGEX_ORDERED_LIST_HEAD.exec(x));
+    return !!(REGEX_HEADING.exec(x) || REGEX_FOOTNOTE_TEXT.exec(x) || REGEX_HORIZONTAL_RULE.exec(x) || REGEX_QUOTE.exec(x) || REGEX_BLOCK_START.exec(x) || REGEX_BLOCK_END.exec(x) || REGEX_UNORDERED_LIST_HEAD.exec(x) || REGEX_ORDERED_LIST_HEAD.exec(x));
 }
 function _parseSingleLogicLine(x, n) {
     var _a, _b;
-    if (n >= x.length) {
-        return undefined;
-    }
+    if (n >= x.length) return undefined;
     let matchres;
-    if (matchres = REGEX_HEADING.exec(x[n])) {
-        return [
-            [{ _nodeType: ast.CamusNodeType.Heading, level: matchres[1].length, text: _parseInline(matchres[2].trim()) }],
-            n + 1
-        ];
-    }
-    else if (matchres = REGEX_HORIZONTAL_RULE.exec(x[n])) {
-        return [
-            [{ _nodeType: ast.CamusNodeType.HorizontalRule }],
-            n + 1
-        ];
-    }
+    if (matchres = REGEX_HEADING.exec(x[n])) return [
+        [
+            {
+                _nodeType: ast.CamusNodeType.Heading,
+                level: matchres[1].length,
+                text: _parseInline(matchres[2].trim())
+            }
+        ],
+        n + 1
+    ];
+    else if (matchres = REGEX_HORIZONTAL_RULE.exec(x[n])) return [
+        [
+            {
+                _nodeType: ast.CamusNodeType.HorizontalRule
+            }
+        ],
+        n + 1
+    ];
     else if (matchres = REGEX_QUOTE.exec(x[n])) {
         let i = n + 1;
         let matchres2;
         let minprefix = matchres[1];
-        while ((x[i] !== undefined) && (matchres2 = REGEX_QUOTE.exec(x[i]))) {
+        while(x[i] !== undefined && (matchres2 = REGEX_QUOTE.exec(x[i]))){
             i++;
-            if (minprefix.length > matchres2[1].length) {
-                minprefix = matchres2[1];
-            }
+            if (minprefix.length > matchres2[1].length) minprefix = matchres2[1];
         }
         let subdoc = x.slice(n, i);
-        let subdocRes = _parseDocument(subdoc.map((v) => v.substring(minprefix.length)));
+        let subdocRes = _parseDocument(subdoc.map((v)=>v.substring(minprefix.length)));
         return [
-            [{ _nodeType: ast.CamusNodeType.Block, type: 'quote', arg: '', text: subdocRes }],
+            [
+                {
+                    _nodeType: ast.CamusNodeType.Block,
+                    type: "quote",
+                    arg: "",
+                    text: subdocRes
+                }
+            ],
             i
         ];
-    }
-    else if (matchres = REGEX_BLOCK_START.exec(x[n])) {
+    } else if (matchres = REGEX_BLOCK_START.exec(x[n])) {
         let type = (_a = matchres[1]) === null || _a === void 0 ? void 0 : _a.trim();
         let args = (_b = matchres[2]) === null || _b === void 0 ? void 0 : _b.trim();
         let i = n + 1;
         let matchres2;
         let subdoc = [];
-        let minindent = +Infinity;
+        let minindent = Infinity;
         // NOTE: empty lines does not count when calculating minimal indent.
-        while ((x[i] !== undefined) && !(REGEX_BLOCK_END.exec(x[i]))) {
+        while(x[i] !== undefined && !REGEX_BLOCK_END.exec(x[i])){
             matchres2 = REGEX_TRIM_LEFT.exec(x[i]);
-            if (x[i] && x[i].trim() && minindent > matchres2[1].length) {
-                minindent = matchres2[1].length;
-            }
-            subdoc.push((x[i] === '\\#}') ? '#}' : x[i]);
+            if (x[i] && x[i].trim() && minindent > matchres2[1].length) minindent = matchres2[1].length;
+            subdoc.push(x[i] === "\\#}" ? "#}" : x[i]);
             i++;
         }
         i++;
-        let subdocNoIndent = subdoc.map((v) => v.substring(minindent));
-        let subdocRes = { _nodeType: ast.CamusNodeType.Block,
+        let subdocNoIndent = subdoc.map((v)=>v.substring(minindent));
+        let subdocRes;
+        if (type.toLowerCase() === "table") {
+            let section1 = [];
+            let section2 = [];
+            let subj = section1;
+            let isHeadSeparatorPassed = false;
+            subdocNoIndent.forEach((v1)=>{
+                if (!REGEX_HORIZONTAL_RULE.exec(v1)) subj.push(_splitTableCell(v1).map((v)=>_parseInline(v)));
+                else {
+                    subj = section2;
+                    isHeadSeparatorPassed = true;
+                }
+            });
+            subdocRes = {
+                _nodeType: ast.CamusNodeType.Table,
+                header: isHeadSeparatorPassed || section2.length <= 0 ? section1 : [],
+                body: isHeadSeparatorPassed || section2.length <= 0 ? section2 : section1
+            };
+        } else subdocRes = {
+            _nodeType: ast.CamusNodeType.Block,
             type: type,
             arg: args,
-            text: VERBATIM_BLOCK_TYPES.includes(type) ? subdocNoIndent.map((v) => [v]) : _parseDocument(subdocNoIndent)
+            text: VERBATIM_BLOCK_TYPES.includes(type) ? subdocNoIndent.map((v)=>[
+                    v
+                ]) : _parseDocument(subdocNoIndent)
         };
         return [
-            [subdocRes],
+            [
+                subdocRes
+            ],
             i
         ];
-    }
-    else if (matchres = REGEX_FOOTNOTE_TEXT.exec(x[n])) {
+    } else if (matchres = REGEX_FOOTNOTE_TEXT.exec(x[n])) {
         let i;
         let matchres2;
         let footnoteTextList = [];
         do {
             i = n + 1;
             let indent = matchres[1].length;
-            let subdoc = [x[n].substring(indent).trim()];
-            while ((x[i] !== undefined) && (matchres2 = REGEX_TRIM_LEFT.exec(x[i]))) {
+            let subdoc = [
+                x[n].substring(indent).trim()
+            ];
+            while(x[i] !== undefined && (matchres2 = REGEX_TRIM_LEFT.exec(x[i]))){
                 // NOTE: empty lines does not count when checking indent.
-                if (!x[i] || !x[i].trim() || (matchres2[1].length >= indent)) {
+                if (!x[i] || !x[i].trim() || matchres2[1].length >= indent) {
                     subdoc.push(x[i].substring(indent));
                     i++;
-                }
-                else {
-                    break;
-                }
+                } else break;
             }
             let parsedSubdoc = _parseDocument(subdoc);
             let subdocRes = {
@@ -1096,29 +1245,32 @@ function _parseSingleLogicLine(x, n) {
             };
             footnoteTextList.push(subdocRes);
             n = i;
-        } while ((x[n] !== undefined) && (matchres = REGEX_FOOTNOTE_TEXT.exec(x[n])));
+        }while (x[n] !== undefined && (matchres = REGEX_FOOTNOTE_TEXT.exec(x[n])));
         return [
-            [{ _nodeType: ast.CamusNodeType.FootnoteBlock, content: footnoteTextList }],
+            [
+                {
+                    _nodeType: ast.CamusNodeType.FootnoteBlock,
+                    content: footnoteTextList
+                }
+            ],
             n
         ];
-    }
-    else if (matchres = REGEX_UNORDERED_LIST_HEAD.exec(x[n])) {
+    } else if (matchres = REGEX_UNORDERED_LIST_HEAD.exec(x[n])) {
         let i;
         let matchres2;
         let listItemList = [];
         do {
             i = n + 1;
             let indent = matchres[1].length;
-            let subdoc = [x[n].substring(indent).trim()];
-            while ((x[i] !== undefined) && (matchres2 = REGEX_TRIM_LEFT.exec(x[i]))) {
+            let subdoc = [
+                x[n].substring(indent).trim()
+            ];
+            while(x[i] !== undefined && (matchres2 = REGEX_TRIM_LEFT.exec(x[i]))){
                 // NOTE: empty lines does not count when checking indent.
-                if (!x[i] || !x[i].trim() || (matchres2[1].length >= indent)) {
+                if (!x[i] || !x[i].trim() || matchres2[1].length >= indent) {
                     subdoc.push(x[i].substring(indent));
                     i++;
-                }
-                else {
-                    break;
-                }
+                } else break;
             }
             let parsedSubdoc = _parseDocument(subdoc);
             let listItem = {
@@ -1127,29 +1279,33 @@ function _parseSingleLogicLine(x, n) {
             };
             listItemList.push(listItem);
             n = i;
-        } while ((x[n] !== undefined) && (matchres = REGEX_UNORDERED_LIST_HEAD.exec(x[n])));
+        }while (x[n] !== undefined && (matchres = REGEX_UNORDERED_LIST_HEAD.exec(x[n])));
         return [
-            [{ _nodeType: ast.CamusNodeType.List, ordered: false, items: listItemList }],
+            [
+                {
+                    _nodeType: ast.CamusNodeType.List,
+                    ordered: false,
+                    items: listItemList
+                }
+            ],
             n
         ];
-    }
-    else if (matchres = REGEX_ORDERED_LIST_HEAD.exec(x[n])) {
+    } else if (matchres = REGEX_ORDERED_LIST_HEAD.exec(x[n])) {
         let i;
         let matchres2;
         let listItemList = [];
         do {
             i = n + 1;
             let indent = matchres[1].length;
-            let subdoc = [x[n].substring(indent).trim()];
-            while ((x[i] !== undefined) && (matchres2 = REGEX_TRIM_LEFT.exec(x[i]))) {
+            let subdoc = [
+                x[n].substring(indent).trim()
+            ];
+            while(x[i] !== undefined && (matchres2 = REGEX_TRIM_LEFT.exec(x[i]))){
                 // NOTE: empty lines does not count when checking indent.
-                if (!x[i] || !x[i].trim() || (matchres2[1].length >= indent)) {
+                if (!x[i] || !x[i].trim() || matchres2[1].length >= indent) {
                     subdoc.push(x[i].substring(indent));
                     i++;
-                }
-                else {
-                    break;
-                }
+                } else break;
             }
             let parsedSubdoc = _parseDocument(subdoc);
             let listItem = {
@@ -1158,27 +1314,30 @@ function _parseSingleLogicLine(x, n) {
             };
             listItemList.push(listItem);
             n = i;
-        } while ((x[n] !== undefined) && (matchres = REGEX_ORDERED_LIST_HEAD.exec(x[n])));
+        }while (x[n] !== undefined && (matchres = REGEX_ORDERED_LIST_HEAD.exec(x[n])));
         return [
-            [{ _nodeType: ast.CamusNodeType.List, ordered: true, items: listItemList }],
+            [
+                {
+                    _nodeType: ast.CamusNodeType.List,
+                    ordered: true,
+                    items: listItemList
+                }
+            ],
             n
         ];
-    }
-    else {
+    } else {
         let i = n;
         if (x[i] !== undefined) {
             if (!x[i] || !x[i].trim()) {
-                while ((x[i] !== undefined) && (!x[i] || !x[i].trim())) {
-                    i++;
-                }
-                return [[], i];
-            }
-            else {
-                while (x[i] && x[i].trim() && !_checkIfSpecialTreatmentRequired(x[i])) {
-                    i++;
-                }
+                while(x[i] !== undefined && (!x[i] || !x[i].trim()))i++;
                 return [
-                    x.slice(n, i).map((v) => _parseInline(v)).reduce((a, b) => a.concat(b), []),
+                    [],
+                    i
+                ];
+            } else {
+                while(x[i] && x[i].trim() && !_checkIfSpecialTreatmentRequired(x[i]))i++;
+                return [
+                    x.slice(n, i).map((v)=>_parseInline(v)).reduce((a, b)=>a.concat(b), []),
                     i
                 ];
             }
@@ -1188,15 +1347,12 @@ function _parseSingleLogicLine(x, n) {
 function _parseDocument(x) {
     let result = [];
     let n = 0;
-    while (x[n] !== undefined) {
+    while(x[n] !== undefined){
         let parseSingleResult = _parseSingleLogicLine(x, n);
         if (parseSingleResult) {
-            if (parseSingleResult[0].length > 0) {
-                result.push(parseSingleResult[0]);
-            }
+            if (parseSingleResult[0].length > 0) result.push(parseSingleResult[0]);
             n = parseSingleResult[1];
-        }
-        else {
+        } else {
             result.push(_parseInline(x[n]));
             n++;
         }
@@ -1204,50 +1360,62 @@ function _parseDocument(x) {
     return result;
 }
 function parse(x) {
-    let res = _parseDocument(x.split('\n'));
+    let res = _parseDocument(x.replace(/\r\n/g, "\n").split("\n"));
     return res;
 }
 exports.parse = parse;
 
-},{"./Assert":"1rZxk","./AST":"5RikK"}],"1rZxk":[function(require,module,exports) {
+},{"./Assert":"3ZmOR","./AST":"dTKef"}],"3ZmOR":[function(require,module,exports) {
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.ASSERT = void 0;
 function ASSERT(text, condition) {
-    if (!condition) {
-        throw new Error(`assert error: ${text}`);
-    }
+    if (!condition) throw new Error(`assert error: ${text}`);
 }
 exports.ASSERT = ASSERT;
 
-},{}],"6MBKk":[function(require,module,exports) {
+},{}],"6J4V1":[function(require,module,exports) {
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+var __createBinding = this && this.__createBinding || (Object.create ? function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
+    Object.defineProperty(o, k2, {
+        enumerable: true,
+        get: function() {
+            return m[k];
+        }
+    });
+} : function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
+});
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function(o, v) {
+    Object.defineProperty(o, "default", {
+        enumerable: true,
+        value: v
+    });
+} : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
+var __importStar = this && this.__importStar || function(mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) {
+        for(var k in mod)if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    }
     __setModuleDefault(result, mod);
     return result;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.HTMLRenderer = void 0;
 const ast = __importStar(require("./AST"));
 const PrettyPrinter_1 = require("./PrettyPrinter");
 // NOTE: punctuations inside inline code should not be affected.
 class HTMLRenderer {
-    constructor(options) {
+    constructor(options){
         this._additionalHead = [];
         this._externalStylesheet = [];
         this._replacePunctuation = undefined;
@@ -1262,136 +1430,111 @@ class HTMLRenderer {
     }
     render(x) {
         this._pp.clear();
-        x.forEach((v) => this._renderLogicLine(v));
+        x.forEach((v)=>this._renderLogicLine(v));
         return this._pp.result;
     }
     _renderLine(x) {
         this._singleQuote = false;
         this._doubleQuote = false;
-        x.forEach((v) => this._render(v));
+        x.forEach((v)=>this._render(v));
     }
     _renderLogicLine(x, noWrapper = false) {
         this._singleQuote = false;
         this._doubleQuote = false;
         let firstPassed = false;
-        x.forEach((v) => {
+        x.forEach((v)=>{
             if (!noWrapper && ast.isCamusInlineNode(v)) {
                 if (!firstPassed) {
-                    this._pp.string('<p>');
+                    this._pp.string("<p>");
                     firstPassed = true;
                 }
-            }
-            else {
-                if (!noWrapper && firstPassed) {
-                    this._pp.string('</p>').line().indent();
-                    firstPassed = false;
-                }
+            } else if (!noWrapper && firstPassed) {
+                this._pp.string("</p>").line().indent();
+                firstPassed = false;
             }
             this._render(v);
-            this._pp.line();
         });
-        if (!noWrapper && firstPassed) {
-            this._pp.string('</p>').line();
-        }
+        if (!noWrapper && firstPassed) this._pp.string("</p>").line();
     }
     _render(x) {
-        if (typeof x === 'string') {
-            this._text(x);
-        }
-        else {
-            switch (x._nodeType) {
-                case ast.CamusNodeType.Heading: {
-                    this._heading(x);
-                    break;
-                }
-                case ast.CamusNodeType.Block: {
-                    this._block(x);
-                    break;
-                }
-                case ast.CamusNodeType.InlineStyle: {
-                    this._inlineStyle(x);
-                    break;
-                }
-                case ast.CamusNodeType.Tag: {
-                    this._tag(x);
-                    break;
-                }
-                case ast.CamusNodeType.Link: {
-                    this._link(x);
-                    break;
-                }
-                case ast.CamusNodeType.Ref: {
-                    this._ref(x);
-                    break;
-                }
-                case ast.CamusNodeType.FootnoteRef: {
-                    this._footnoteRef(x);
-                    break;
-                }
-                case ast.CamusNodeType.FootnoteText: {
-                    this._footnoteText(x);
-                    break;
-                }
-                case ast.CamusNodeType.FootnoteBlock: {
-                    this._footnoteBlock(x);
-                    break;
-                }
-                case ast.CamusNodeType.Image: {
-                    this._image(x);
-                    break;
-                }
-                case ast.CamusNodeType.List: {
-                    this._list(x);
-                    break;
-                }
-                case ast.CamusNodeType.InlineIgnore: {
-                    break;
-                }
-                case ast.CamusNodeType.HorizontalRule: {
-                    this._pp.line().indent().string('<hr />').line();
-                    break;
-                }
-                default: {
-                    this._pp.string(`${x}`);
-                }
-            }
+        if (typeof x === "string") this._text(x);
+        else switch(x._nodeType){
+            case ast.CamusNodeType.Heading:
+                this._heading(x);
+                break;
+            case ast.CamusNodeType.Block:
+                this._block(x);
+                break;
+            case ast.CamusNodeType.InlineStyle:
+                this._inlineStyle(x);
+                break;
+            case ast.CamusNodeType.Tag:
+                this._tag(x);
+                break;
+            case ast.CamusNodeType.Link:
+                this._link(x);
+                break;
+            case ast.CamusNodeType.Ref:
+                this._ref(x);
+                break;
+            case ast.CamusNodeType.FootnoteRef:
+                this._footnoteRef(x);
+                break;
+            case ast.CamusNodeType.FootnoteText:
+                this._footnoteText(x);
+                break;
+            case ast.CamusNodeType.FootnoteBlock:
+                this._footnoteBlock(x);
+                break;
+            case ast.CamusNodeType.Image:
+                this._image(x);
+                break;
+            case ast.CamusNodeType.Table:
+                this._table(x);
+                break;
+            case ast.CamusNodeType.List:
+                this._list(x);
+                break;
+            case ast.CamusNodeType.InlineIgnore:
+                break;
+            case ast.CamusNodeType.HorizontalRule:
+                this._pp.line().indent().string("<hr />").line();
+                break;
+            default:
+                this._pp.string(`${x}`);
         }
     }
     _text(n) {
         let s = n;
         if (this._replacePunctuation) {
-            if (!this._replacePunctuation.singleQuote && !this._replacePunctuation.doubleQuote) {
-                s = s.replace(/--/g, this._replacePunctuation.doubleDash || '--').replace(/-/g, this._replacePunctuation.singleDash || '-');
-            }
+            if (!this._replacePunctuation.singleQuote && !this._replacePunctuation.doubleQuote) s = s.replace(/--/g, this._replacePunctuation.doubleDash || "--").replace(/-/g, this._replacePunctuation.singleDash || "-");
             else {
-                let singleQuote = this._replacePunctuation.singleQuote || ["'", "'"];
-                let doubleQuote = this._replacePunctuation.doubleQuote || ['"', '"'];
+                let singleQuote = this._replacePunctuation.singleQuote || [
+                    "'",
+                    "'"
+                ];
+                let doubleQuote = this._replacePunctuation.doubleQuote || [
+                    '"',
+                    '"'
+                ];
                 let r = [];
-                for (let i = 0; i < n.length; i++) {
-                    switch (n[i]) {
-                        case '"': {
-                            r.push(doubleQuote[this._doubleQuote ? 1 : 0]);
-                            this._doubleQuote = !this._doubleQuote;
-                            break;
-                        }
-                        case "'": {
-                            r.push(singleQuote[this._singleQuote ? 1 : 0]);
-                            this._singleQuote = !this._singleQuote;
-                            break;
-                        }
-                        default: {
-                            r.push(n[i]);
-                            break;
-                        }
-                    }
+                for(let i = 0; i < n.length; i++)switch(n[i]){
+                    case '"':
+                        r.push(doubleQuote[this._doubleQuote ? 1 : 0]);
+                        this._doubleQuote = !this._doubleQuote;
+                        break;
+                    case "'":
+                        r.push(singleQuote[this._singleQuote ? 1 : 0]);
+                        this._singleQuote = !this._singleQuote;
+                        break;
+                    default:
+                        r.push(n[i]);
+                        break;
                 }
-                s = r.join('');
+                s = r.join("");
             }
-        }
-        else {
-            s = n;
-        }
-        this._pp.string(s.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+        } else s = n;
+        this._pp.string(s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
     }
     _heading(n) {
         this._pp.indent().string(`<h${n.level}>`);
@@ -1401,141 +1544,165 @@ class HTMLRenderer {
     _tag(n) {
         this._pp.string(`<a name="${n.id}"></a>`);
     }
-    _block(n) {
-        if (n.type === 'ignore') {
-            return;
+    _table(n) {
+        this._pp.indent().string("<table>").line().addIndent();
+        if (n.header.length > 0) {
+            this._pp.indent().string("<thead>").line().addIndent();
+            n.header.forEach((r)=>{
+                this._pp.indent().string("<tr>").line().addIndent();
+                r.forEach((j)=>{
+                    this._pp.indent().string("<th>").line().addIndent();
+                    this._renderLine(j);
+                    this._pp.removeIndent().indent().string("</th>").line();
+                });
+                this._pp.removeIndent().indent().string("</tr>").line();
+            });
+            this._pp.removeIndent().indent().string("</thead>").line();
         }
-        switch (n.type) {
+        if (n.body.length > 0) {
+            this._pp.indent().string("<tbody>").line().addIndent();
+            n.body.forEach((r)=>{
+                this._pp.indent().string("<tr>").line().addIndent();
+                r.forEach((j)=>{
+                    this._pp.indent().string("<td>").line().addIndent();
+                    this._renderLine(j);
+                    this._pp.removeIndent().indent().string("</td>").line();
+                });
+                this._pp.removeIndent().indent().string("</tr>").line();
+            });
+            this._pp.removeIndent().indent().string("</tbody>").line();
+        }
+        this._pp.removeIndent().indent().string(`</table>`).line();
+    }
+    _block(n) {
+        if (n.type === "ignore") return;
+        switch(n.type){
             // NOTE: in `verbatim` and `code`, assumes both only contain strings.
-            case 'verbatim': {
-                this._pp.indent().string(`<pre ${n.arg ? `class="${n.arg}"` : ''}>`);
-                n.text.forEach((v) => {
-                    v.forEach((j) => { this._text(j); this._pp.line(); });
+            case "verbatim":
+                this._pp.indent().string(`<pre ${n.arg ? `class="${n.arg}"` : ""}>`);
+                n.text.forEach((v)=>{
+                    v.forEach((j)=>{
+                        this._text(j);
+                        this._pp.line();
+                    });
                 });
                 this._pp.string(`</pre>`).line();
                 break;
-            }
-            case 'code': {
+            case "code":
                 this._pp.indent().string(`<pre class="code code-${n.arg}">`);
-                n.text.forEach((v) => {
-                    v.forEach((j) => { this._text(j); this._pp.line(); });
+                n.text.forEach((v)=>{
+                    v.forEach((j)=>{
+                        this._text(j);
+                        this._pp.line();
+                    });
                 });
                 this._pp.string(`</pre>`).line();
                 break;
-            }
-            case 'quote': {
+            case "raw":
+                n.text.forEach((v)=>{
+                    v.forEach((j)=>{
+                        this._pp.string(j);
+                        this._pp.line();
+                    });
+                });
+                break;
+            case "quote":
                 this._pp.indent().string(`<blockquote>`).line().addIndent();
-                n.text.forEach((v) => { this._renderLogicLine(v); });
+                n.text.forEach((v)=>{
+                    this._renderLogicLine(v);
+                });
                 this._pp.removeIndent().indent().string(`</blockquote>`).line();
                 break;
-            }
-            default: {
-                this._pp.indent().string(`<div class="block-${n.arg || ''}">`).line().addIndent();
-                n.text.forEach((v) => { this._renderLogicLine(v); });
+            default:
+                this._pp.indent().string(`<div class="block-${n.arg || ""}">`).line().addIndent();
+                n.text.forEach((v)=>{
+                    this._renderLogicLine(v);
+                });
                 this._pp.removeIndent().indent().string(`</div>`).line();
                 break;
-            }
         }
         return;
     }
     _inlineStyle(n) {
-        let start = n.style.map((v) => `<${v}>`).join('').replace(/bold/g, 'b').replace(/italics/g, 'i').replace(/underline/g, 'span style="text-decoration:underline"').replace(/delete/g, 'del').replace(/code/g, 'code');
-        let end = n.style.map((v) => `</${v}>`).join('').replace(/bold/g, 'b').replace(/italics/g, 'i').replace(/underline/g, 'span').replace(/delete/g, 'del').replace(/code/g, 'code');
+        let start = n.style.map((v)=>`<${v}>`).join("").replace(/bold/g, "b").replace(/italics/g, "i").replace(/underline/g, 'span style="text-decoration:underline"').replace(/delete/g, "del").replace(/code/g, "code");
+        let end = n.style.map((v)=>`</${v}>`).join("").replace(/bold/g, "b").replace(/italics/g, "i").replace(/underline/g, "span").replace(/delete/g, "del").replace(/code/g, "code");
         this._pp.string(start);
         this._renderLine(n.text);
         this._pp.string(end);
     }
     _link(n) {
         this._pp.string(`<a href="${n.url}">`);
-        if (n.text && n.text.filter((v) => v && (typeof v !== 'string' || v.trim())).length > 0) {
-            this._renderLine(n.text);
-        }
-        else {
-            this._pp.string(n.url);
-        }
-        this._pp.string('</a>');
+        if (n.text && n.text.filter((v)=>v && (typeof v !== "string" || v.trim())).length > 0) this._renderLine(n.text);
+        else this._pp.string(n.url);
+        this._pp.string("</a>");
     }
     _ref(n) {
         // NOTE: core lib does nothing on ref nodes.
         // to make use of ref node, extends from CamusHTMLRenderer or write your own.
-        if (n.path.startsWith('#')) {
+        if (n.path.startsWith("#")) {
             this._pp.string(`<a href="${n.path}">`);
-            if (n.text && n.text.filter((v) => v && (typeof v !== 'string' || v.trim())).length > 0) {
-                this._renderLine(n.text);
-            }
-            else {
-                this._pp.string(n.path);
-            }
-            this._pp.string('</a>');
-        }
-        else {
-            this._pp.string('');
-        }
+            if (n.text && n.text.filter((v)=>v && (typeof v !== "string" || v.trim())).length > 0) this._renderLine(n.text);
+            else this._pp.string(n.path);
+            this._pp.string("</a>");
+        } else this._pp.string("");
     }
     _footnoteRef(n) {
-        this._pp.string(`<sup><a href="#cite-${n.id}">[${n.id}]</a></sup>`);
+        this._pp.string(`<sup><a name="cite-ret-${n.id}" href="#cite-${n.id}">[${n.id}]</a></sup>`);
     }
     _footnoteText(n) {
         this._pp.indent().string(`<div class="footnote-item">[<a name="cite-${n.id}">${n.id}</a>] `);
-        n.text.forEach((v, i) => this._renderLogicLine(v, i === 0));
-        this._pp.removeIndent().indent().string(`</div>`).line();
+        n.text.forEach((v, i)=>this._renderLogicLine(v, i === 0));
+        this._pp.removeIndent().indent().string(`  <a href="#cite-ret-${n.id}">&larrhk;</a></div>`).line();
     }
     _footnoteBlock(n) {
         this._pp.indent().string('<div class="footnote">').line().addIndent();
-        n.content.forEach((v) => {
+        n.content.forEach((v)=>{
             this._footnoteText(v);
         });
-        this._pp.removeIndent().string('</div>').line();
+        this._pp.removeIndent().string("</div>").line();
     }
     _image(n) {
         this._pp.string(`<img src="${n.url}" alt="${n.alt}" />`);
     }
     _list(n) {
-        let tagName = n.ordered ? 'ol' : 'ul';
+        let tagName = n.ordered ? "ol" : "ul";
         this._pp.line().indent().string(`<${tagName}>`).line().addIndent();
-        n.items.forEach((v) => {
+        n.items.forEach((v1)=>{
             this._pp.indent().string(`<li>`);
-            v.text.forEach((v, i) => this._renderLogicLine(v, i === 0));
+            v1.text.forEach((v, i)=>this._renderLogicLine(v, i === 0));
             this._pp.string(`</li>`).line();
         });
         this._pp.removeIndent().indent().string(`</${tagName}>`).line();
     }
     preamble() {
-        this._pp.string('<html>').line().addIndent()
-            .indent().string('<head>').line().addIndent();
-        if (this._additionalHead) {
-            this._additionalHead.forEach((v) => {
-                this._pp.indent().string(v).line();
-            });
-        }
-        if (this._externalStylesheet) {
-            this._externalStylesheet.forEach((v) => {
-                this._pp.indent().string(`<link rel="stylesheet" href="${encodeURIComponent(v)}">`).line();
-            });
-        }
-        this._pp.removeIndent().indent().string('</head>').line()
-            .indent().string('<body>').line()
-            .addIndent();
+        this._pp.string("<html>").line().addIndent().indent().string("<head>").line().addIndent();
+        if (this._additionalHead) this._additionalHead.forEach((v)=>{
+            this._pp.indent().string(v).line();
+        });
+        if (this._externalStylesheet) this._externalStylesheet.forEach((v)=>{
+            this._pp.indent().string(`<link rel="stylesheet" href="${encodeURIComponent(v)}">`).line();
+        });
+        this._pp.removeIndent().indent().string("</head>").line().indent().string("<body>").line().addIndent();
     }
     postamble() {
-        this._pp.line().removeIndent().indent().string('</body>').line()
-            .removeIndent().string('</html>').line()
-            .line();
+        this._pp.line().removeIndent().indent().string("</body>").line().removeIndent().string("</html>").line().line();
     }
 }
 exports.HTMLRenderer = HTMLRenderer;
 
-},{"./AST":"5RikK","./PrettyPrinter":"54PH2"}],"54PH2":[function(require,module,exports) {
+},{"./AST":"dTKef","./PrettyPrinter":"bUV89"}],"bUV89":[function(require,module,exports) {
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.PrettyPrinter = void 0;
 class PrettyPrinter {
-    constructor() {
+    constructor(){
         this._res = [];
-        this._indent = '';
+        this._indent = "";
     }
     addIndent() {
-        this._indent = this._indent + '    ';
+        this._indent = this._indent + "    ";
         return this;
     }
     removeIndent() {
@@ -1547,7 +1714,7 @@ class PrettyPrinter {
         return this;
     }
     line() {
-        this._res.push('\n');
+        this._res.push("\n");
         return this;
     }
     string(x) {
@@ -1555,23 +1722,25 @@ class PrettyPrinter {
         return this;
     }
     get result() {
-        return this._res.join('');
+        return this._res.join("");
     }
     clear() {
         this._res = [];
-        this._indent = '';
+        this._indent = "";
     }
 }
 exports.PrettyPrinter = PrettyPrinter;
 
-},{}]},["2QnAD","vLDcy"], "vLDcy", "parcelRequire427e")
+},{}]},["7sLH5","5yJrP"], "5yJrP", "parcelRequire94c2")
 
 </script>
 
 <noscript>
     <h1>Camus: A humble markup language</h1>
-    <img src="/camus-icon.1f87535c.png" alt="camus logo">
-    Github repository: <a href="https://github.com/CamusMarkup/Camus">https://github.com/CamusMarkup/Camus</a>
+    <img src="/camus-icon.528b9554.png" alt="camus logo">
+    
+    <p>GitHub repository: <a href="https://github.com/CamusMarkup/Camus">https://github.com/CamusMarkup/Camus</a></p>
+    <p>sr.ht repository: <a href="https://git.sr.ht/~bctnry/camus">https://git.sr.ht/~bctnry/camus</a></p>
 
     <h2>Sample</h2>
 
@@ -1583,22 +1752,57 @@ exports.PrettyPrinter = PrettyPrinter;
 ===== Level 5 Header
 ====== Level 6 Header
 
-> This beat is mine
-> You can have it
-> Just take your time
-> And do what you wanna do (And do that dance)
+-----
+
+5 dash or more will be converted to horizontal ruler.
+
+*bold* /italics/ _underline_ ~~delete~~ `inline code`
+
+{img:https://img_link} {img(alt):https://img_link}
+
+{link(Here):https://sebastian.graphics}
+
+{ref:other_cm3_file.cm3}
+
+{footnote@1}  {footnote@2}
+
+
+> Feeling My Heart Run Slow, I’m feeling like...
+> Letting my blood run cold, feeling like...
+> You told me I’ve got no soul
+> So I’m feeling like letting my heart run slow 
+
+> She keeps on calling me / 
+> I don't know where / 
+> She keeps on calling me / 
+> I don't know where / 
+> Telling me where to go / 
+> Telling me no
+
+> And head up, dear, you're shallow and blind / 
+> And head up, dear, the rabbit might die / 
+> And you say "Hi", and you say "Hi"
 > 
-> This beat is mine
-> You can have it
-> Just party down
-> And do what you wanna do (But do that dance)
+> Because I'm putting up with your constant whine / 
+> And I won't last too long / 
+> And friendly faces with put-on smiles / 
+> A drunken mind game past / 
+> Cause I'm putting the boot in tonight
+
+#{table
+  concept|unifies
+  ------
+  table-header|scopable blocks|functions, methods, closures
+  prototypes|objects, classes, namespaces, locals
+  messages|operators, calls, assigns, var access
+#}
 
 #{verbatim
     Tonight, before you lay down to the sweetness of your sleep
         Do you question your surrender to the drop from Lover's Leap
     Or does the anaesthetic darkness take hold on it's very own?
         Does your body rise in service with not one dissenting groan?
-}
+#}
 
 #{ignore
   ignored region
@@ -1633,20 +1837,6 @@ exports.PrettyPrinter = PrettyPrinter;
   2.  ol2
   3.  ol3
 - ulist3
-
-more than 5 dash will be converted to horizontal rule.
-
------
-
-*bold* /italics/ _underline_ ~~delete~~ `inline code`
-
-{img:https://img_link} {img(alt):https://img_link}
-
-{link(Here):https://sebastian.graphics}
-
-{ref:other_cm3_file.cm3}
-
-{footnote@1}  {footnote@2}
 
 
 [1]: blahblahblahblahblah
