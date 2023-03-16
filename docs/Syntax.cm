@@ -1,0 +1,194 @@
+= A (very informal) syntax of Camus
+
+(NOTE: this is the syntax for Camus 2; some features might have not been implemented.)
+
+== Escape (or, the Big Exit^{TM})
+
+All the syntax described below can be overrided by adding a single `\\` before the special characters (e.g. `\*bold\*` will make text bolder, but `\\\*bold\\\*` won't.), no exceptions. Adding it before normal characters will not have any effect (e.g. `\\a` will be treated the same as `a`), and the sequence `\\\\` yields a single `\\`.
+
+== Headers
+
+Headers all starts with `=`. The number of `=` determines the level of header (e.g. when rendered to HTML `=` would be `<h1>`, `==` would be `<h2>`, etc.). There must be at least one whitespace between `=` and the actual header text. For the header text part you can use any inline nodes.
+
+== Horizontal ruler
+
+5 consecutive dashes (`-`) that occupies a single line is parsed as a horizontal ruler (except in certain blocks (described below)).
+
+== Inline nodes
+
+"Nodes" because internally they're nodes on an AST after the parsing stage, "inline" because they generally are things that's "within a line". These things include:
+
++ Texts
++ Normal text styling stuff, including:
+  + *bold*, /italics/, __underline__, ~~delete~~, `inline code`
+  + {=highlighted text=}, superscript and subscript.
++ Images
++ Hyperlinks
++ References and wiki references (described below)
++ Tags (described below)
++ Footnote refs
++ (In Camus 2) Global state flags (described below)
+
+(There's also this thing called "atomic nodes"; this category covers all of the above and .)
+
+== Inline styles
+
+The rules for inline style goes like this: each style (except superscript and subscript; they have special rules) has a "starting sequence" and an "ending sequence", which are listed below:
+
++ bold: `\*` and `\*`
++ italics: `\/` and `\/`
++ underline: `\_\_` and `\_\_`
++ delete: `\~~` and `\~~`
++ inline code: `\`` and `\``
++ highlighted: `\{=` and `=\}`
+
+Normally inline styles are required to start and end in a stack-like manner (e.g. `\*\/text\/\*` is valid, but `\*\/text\*\/` is not). When a style is "prematurely-ended" (e.g. in `\*\/text\*\/` the `\/` character started a sequence of italics text but the sequence started by the first `\*` prematurely-ended without another `\/`), all styles that started after it ends as well. This rule is probably better illustrated with an example:
+
+#{table
+Text|Stack|Reason
+------
+\*\_\_\/text\*||
+\_\_\/text\*|bold,|starting sequence for bold
+\/text\*|bold, underline,|starting sequence for underline
+text\*|bold, underline, italics|starting sequence for italics
+\*|bold, underline, italics|normal text without any style
+||ending sequence for bold, all styles come after `bold` implicitly ends.
+#}
+
+=== Superscripts and subscripts
+
+In Camus 2 these twos are similar to those in LaTeX:
+
++ Superscripts start with `\^` and subscripts start with `\_`.
++ If the character immediately after `\^` and `\_` is not `\{` then the character itself is rendered as superscript or subscripts.
++ If not, all the texts till the next `\}` (one could use `\\` to escape this) is rendered as superscript or subscript.
+
+== Footnotes
+
+The syntax for footnotes is `\{footnote@/footnote-ref-list/\}`, where `footnote-ref-list` is a list of footnote id (described below in the "footnote text" section) separated with `,`.
+
+== Images
+
+The syntax for images is `\{img:/path/\}` or `\{img(/alt-text/):/path/\}` for images with alt text. With namespaces in Camus 2 you can also write `\{image\/ref(/alt-text/):/path/\}`.
+
+== References
+
+In Camus 1 days references are only used to refer to other Camus documents or a specific tag in the current document, the syntax is `\{ref:/ref-path/\}` or `\{ref\(/ref-text/\):/ref-path/\}` if you want to add additional texts (e.g. when rendering to HTML a reference would generally be rendered as a hyperlink and `/ref-text/` would be this hyperlink's text).
+
+Starting from Camus 2 one can specify a *namespace* to a reference (together with the metadata block (described below) this forms the basis of the "personal knowledge base" parg of Camus 2). The syntax for this would be `\{/namespace-name/\/ref:/ref-path/\}`. How namespaces are handled are up to the parser & render, but the following namespace names shall be reserved:
+
++ `wiki` - for wiki ref (described below).
++ `image` for image ref (described above).
++ `extern` - for referencing a Camus document that's not on your hard drive.
+
+=== Wiki ref
+
+There's a special kind of reference node called the "wiki ref". The syntax is the same but with `ref` replaced with `wiki` and does not support namespace (so the syntax is like `\{wiki:/name/\}`). This is the artifact of trying to adapt Camus 1 into a markup language for wiki. With the addition of namespaces in Camus 2, `\{wiki:\}` shall be equivalent to `\{wiki/ref:\}`.
+
+== Tags
+
+Tags work like the `<a name="xyz">` tag in HTML; it gives a name to a location within a document, and this name can be refered with reference in other places. The syntax is `\{#tag-name\}`.
+
+== Block nodes
+
+"Block node" refers to the kind of nodes that spans multiple line. This includes:
+
++ Blocks with special syntax:
+  + Ordered and unordered lists.
+  + Quote block
+  + Footnote texts.
+  + (In Camus 2) Advanced title blocks.
++ Blocks that uses a generic syntax:
+  + Quote block
+  + Tables
+  + Comment blocks
+  + Code blocks
+  + Preformatted blocks
+  + (In Camus 2) Metadata blocks
+  + (In Camus 2) Raw output blocks
+  + (In Camus 2) Title blocks
+  + (In Camus 2) Advanced title blocks
+
+=== Lists
+
+Unordered list items start with `+`; only `+` is accepted. Ordered list items start with a number and a period `.`. For any list items there's a minimal indent level; anything that (1) immediately follows the line that started with `+` and (2) has a greater indent level is considered to be a part of that list item. The number for ordered list items does not matter; when rendered, the item number is solely determined by the order they appear inside a list block. e.g. this:
+
+#{code camus
+3.  list item 3
+4.  list item 4
+1.  list item 1
+2.  list item 2
+#}
+
+is the same as:
+
+#{code camus
+1.  list item 3
+2.  list item 4
+3.  list item 1
+4.  list item 2
+#}
+
+=== Quote block
+
+Consecutive lines that starts with `> ` is considered to be a quote block.
+
+=== Footnote texts
+
+Footnote text blocks are started implicitly with the use of *footnote text line*. The syntax for a footnote text line is `[/id/]: /footnote text/`. The `id` is alphanumeric, so one could have alphanumeric references like those would appear in certain formats of research papers.
+
+=== Advanced title blocks
+
+Sometimes people add a subtitle afterr the main title. Sometimes people add another subtitle written above the main title (like me). Level 1 headers only supports one line, using level 2 headers are semantically wrong, and using `--` in a level 1 header is ugly. This is where advanced title comes into play. It has three parts:
+
++ Top title: normally used for the title of a series, e.g. 
++ Main title: the actual title.
++ Subtitle: the subtitle.
+
+When a level 1 header is immediately preceded by a line started with `=\^` or succeeded by a line started with `=\_`, it's considered to be the main title of an advanced title block; the line with `=\^` is considered to be the top title and the line with `=\_` is considered to be the subtitle. A fully populated advanced title block would be something like this:
+
+#{code camus
+=^ top title
+=  main title
+=_ subtitle
+#}
+
+=== Blocks with a generic syntax
+
+This kind of blocks starts with a line containing nothing but `#{/block-type/` and ends with a line containing nothing but `#}`. The supported `block-type` are listed below:
+
++ Metadata blocks have the type of `metadata`.
++ Tables have the type of `table`.
++ Block quotes have the type of `quote`.
++ Comment blocks have the type of `ignore`.
++ Code blocks have the type of `code`. 
++ Preformatted blocks have the type of `verbatim`; this name is taken from emacs org-mode.
++ Advanced title blocks have the type of `title`.
+
+Code blocks can take an extra argument for the name of the language, e.g. code blocks that starts with `#{code javascript` would mean it's a javascript code block.
+
+==== Metadata
+
+Within the metadata block each non-empty line represents a key-value pair. The key and the value are separated with a colon `:`. Different tools may support different metadata keys.
+
+==== Tables
+
+This section describes the syntax for table *within* the table block environment.
+
+A table is made up of two parts: table header and table body. Camus does not support very fancy tables. The two parts are separated by a line containing nothing but at least 5 dashes (`-`). Each non-empty line represents a row in the table. The content of each cell is separated by `|`.
+
+==== Raw output blocks
+
+This kind of blocks are used to instruct the renderer to add its content directly to the output. Types of this kind of blocks start with `=`, so its syntax is like `#{=html`.
+
+==== Advanced title blocks
+
+The syntax is the same as metadata blocks but only the following keys are supported:
+
++ `top-title`: the title to be rendered above the main title.
++ `title`: the main title.
++ `subtitle`: the subtitle.
+
+== Global state flags
+
+Global state flags are used to control the renderer's behavior when generating output. The syntax is `\{flag(/flag-name/):/flag-value/}`. Different tools may support different global state flags.

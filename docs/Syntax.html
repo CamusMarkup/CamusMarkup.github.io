@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>A (very informal) syntax of Camus</title>
+</head>
+<body>
+    
+
+<h1>A (very informal) syntax of Camus</h1>
+<p>(NOTE: this is the syntax for Camus 2; some features might have not been implemented.)</p>
+<h2>Escape (or, the Big Exit<sup>TM</sup>)</h2>
+<p>All the syntax described below can be overrided by adding a single <code>\</code> before the special characters (e.g. <code>*bold*</code> will make text bolder, but <code>\*bold\*</code> won't.), no exceptions. Adding it before normal characters will not have any effect (e.g. <code>\a</code> will be treated the same as <code>a</code>), and the sequence <code>\\</code> yields a single <code>\</code>.</p>
+<h2>Headers</h2>
+<p>Headers all starts with <code>=</code>. The number of <code>=</code> determines the level of header (e.g. when rendered to HTML <code>=</code> would be <code>&lt;h1&gt;</code>, <code>==</code> would be <code>&lt;h2&gt;</code>, etc.). There must be at least one whitespace between <code>=</code> and the actual header text. For the header text part you can use any inline nodes.</p>
+<h2>Horizontal ruler</h2>
+<p>5 consecutive dashes (<code>-</code>) that occupies a single line is parsed as a horizontal ruler (except in certain blocks (described below)).</p>
+<h2>Inline nodes</h2>
+<p>"Nodes" because internally they're nodes on an AST after the parsing stage, "inline" because they generally are things that's "within a line". These things include:</p>
+
+<ul>
+    <li>Texts</li>
+    <li>Normal text styling stuff, including:
+    <ul>
+        <li><b>bold</b>, <i>italics</i>, <span style="text-decoration:underline">underline</span>, <del>delete</del>, <code>inline code</code></li>
+        <li><mark>highlighted text</mark>, superscript and subscript.</li>
+    </ul>
+</li>
+    <li>Images</li>
+    <li>Hyperlinks</li>
+    <li>References and wiki references (described below)</li>
+    <li>Tags (described below)</li>
+    <li>Footnote refs</li>
+    <li>(In Camus 2) Global state flags (described below)</li>
+</ul>
+<p>(There's also this thing called "atomic nodes"; this category covers all of the above and .)</p>
+<h2>Inline styles</h2>
+<p>The rules for inline style goes like this: each style (except superscript and subscript; they have special rules) has a "starting sequence" and an "ending sequence", which are listed below:</p>
+
+<ul>
+    <li>bold: <code>*</code> and <code>*</code></li>
+    <li>italics: <code>/</code> and <code>/</code></li>
+    <li>underline: <code>__</code> and <code>__</code></li>
+    <li>delete: <code>~~</code> and <code>~~</code></li>
+    <li>inline code: <code>`</code> and <code>`</code></li>
+    <li>highlighted: <code>{=</code> and <code>=}</code></li>
+</ul>
+<p>Normally inline styles are required to start and end in a stack-like manner (e.g. <code>*/text/*</code> is valid, but <code>*/text*/</code> is not). When a style is "prematurely-ended" (e.g. in <code>*/text*/</code> the <code>/</code> character started a sequence of italics text but the sequence started by the first <code>*</code> prematurely-ended without another <code>/</code>), all styles that started after it ends as well. This rule is probably better illustrated with an example:</p>
+<table>
+    <thead>
+        <tr>
+            <th>
+Text            </th>
+            <th>
+Stack            </th>
+            <th>
+Reason            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+*__/text*            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+__/text*            </td>
+            <td>
+bold,            </td>
+            <td>
+starting sequence for bold            </td>
+        </tr>
+        <tr>
+            <td>
+/text*            </td>
+            <td>
+bold, underline,            </td>
+            <td>
+starting sequence for underline            </td>
+        </tr>
+        <tr>
+            <td>
+text*            </td>
+            <td>
+bold, underline, italics            </td>
+            <td>
+starting sequence for italics            </td>
+        </tr>
+        <tr>
+            <td>
+*            </td>
+            <td>
+bold, underline, italics            </td>
+            <td>
+normal text without any style            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+ending sequence for bold, all styles come after <code>bold</code> implicitly ends.            </td>
+        </tr>
+    </tbody>
+</table>
+<h3>Superscripts and subscripts</h3>
+<p>In Camus 2 these twos are similar to those in LaTeX:</p>
+
+<ul>
+    <li>Superscripts start with <code>^</code> and subscripts start with <code>_</code>.</li>
+    <li>If the character immediately after <code>^</code> and <code>_</code> is not <code>{</code> then the character itself is rendered as superscript or subscripts.</li>
+    <li>If not, all the texts till the next <code>}</code> (one could use <code>\</code> to escape this) is rendered as superscript or subscript.</li>
+</ul>
+<h2>Footnotes</h2>
+<p>The syntax for footnotes is <code>{footnote@<i>footnote-ref-list</i>}</code>, where <code>footnote-ref-list</code> is a list of footnote id (described below in the "footnote text" section) separated with <code>,</code>.</p>
+<h2>Images</h2>
+<p>The syntax for images is <code>{img:<i>path</i>}</code> or <code>{img(<i>alt-text</i>):<i>path</i>}</code> for images with alt text. With namespaces in Camus 2 you can also write <code>{image/ref(<i>alt-text</i>):<i>path</i>}</code>.</p>
+<h2>References</h2>
+<p>In Camus 1 days references are only used to refer to other Camus documents or a specific tag in the current document, the syntax is <code>{ref:<i>ref-path</i>}</code> or <code>{ref(<i>ref-text</i>):<i>ref-path</i>}</code> if you want to add additional texts (e.g. when rendering to HTML a reference would generally be rendered as a hyperlink and <code><i>ref-text</i></code> would be this hyperlink's text).</p>
+<p>Starting from Camus 2 one can specify a <b>namespace</b> to a reference (together with the metadata block (described below) this forms the basis of the "personal knowledge base" parg of Camus 2). The syntax for this would be <code>{<i>namespace-name</i>/ref:<i>ref-path</i>}</code>. How namespaces are handled are up to the parser &amp; render, but the following namespace names shall be reserved:</p>
+
+<ul>
+    <li><code>wiki</code> - for wiki ref (described below).</li>
+    <li><code>image</code> for image ref (described above).</li>
+    <li><code>extern</code> - for referencing a Camus document that's not on your hard drive.</li>
+</ul>
+<h3>Wiki ref</h3>
+<p>There's a special kind of reference node called the "wiki ref". The syntax is the same but with <code>ref</code> replaced with <code>wiki</code> and does not support namespace (so the syntax is like <code>{wiki:<i>name</i>}</code>). This is the artifact of trying to adapt Camus 1 into a markup language for wiki. With the addition of namespaces in Camus 2, <code>{wiki:}</code> shall be equivalent to <code>{wiki/ref:}</code>.</p>
+<h2>Tags</h2>
+<p>Tags work like the <code>&lt;a name="xyz"&gt;</code> tag in HTML; it gives a name to a location within a document, and this name can be refered with reference in other places. The syntax is <code>{#tag-name}</code>.</p>
+<h2>Block nodes</h2>
+<p>"Block node" refers to the kind of nodes that spans multiple line. This includes:</p>
+
+<ul>
+    <li>Blocks with special syntax:
+    <ul>
+        <li>Ordered and unordered lists.</li>
+        <li>Quote block</li>
+        <li>Footnote texts.</li>
+        <li>(In Camus 2) Advanced title blocks.</li>
+    </ul>
+</li>
+    <li>Blocks that uses a generic syntax:
+    <ul>
+        <li>Quote block</li>
+        <li>Tables</li>
+        <li>Comment blocks</li>
+        <li>Code blocks</li>
+        <li>Preformatted blocks</li>
+        <li>(In Camus 2) Metadata blocks</li>
+        <li>(In Camus 2) Raw output blocks</li>
+        <li>(In Camus 2) Title blocks</li>
+        <li>(In Camus 2) Advanced title blocks</li>
+    </ul>
+</li>
+</ul>
+<h3>Lists</h3>
+<p>Unordered list items start with <code>+</code>; only <code>+</code> is accepted. Ordered list items start with a number and a period <code>.</code>. For any list items there's a minimal indent level; anything that (1) immediately follows the line that started with <code>+</code> and (2) has a greater indent level is considered to be a part of that list item. The number for ordered list items does not matter; when rendered, the item number is solely determined by the order they appear inside a list block. e.g. this:</p>
+<pre class="code code-camus">3.  list item 3
+4.  list item 4
+1.  list item 1
+2.  list item 2
+</pre>
+<p>is the same as:</p>
+<pre class="code code-camus">1.  list item 3
+2.  list item 4
+3.  list item 1
+4.  list item 2
+</pre>
+<h3>Quote block</h3>
+<p>Consecutive lines that starts with <code>&gt; </code> is considered to be a quote block.</p>
+<h3>Footnote texts</h3>
+<p>Footnote text blocks are started implicitly with the use of <b>footnote text line</b>. The syntax for a footnote text line is <code>[<i>id</i>]: <i>footnote text</i></code>. The <code>id</code> is alphanumeric, so one could have alphanumeric references like those would appear in certain formats of research papers.</p>
+<h3>Advanced title blocks</h3>
+<p>Sometimes people add a subtitle afterr the main title. Sometimes people add another subtitle written above the main title (like me). Level 1 headers only supports one line, using level 2 headers are semantically wrong, and using <code>--</code> in a level 1 header is ugly. This is where advanced title comes into play. It has three parts:</p>
+
+<ul>
+    <li>Top title: normally used for the title of a series, e.g.</li>
+    <li>Main title: the actual title.</li>
+    <li>Subtitle: the subtitle.</li>
+</ul>
+<p>When a level 1 header is immediately preceded by a line started with <code>=^</code> or succeeded by a line started with <code>=_</code>, it's considered to be the main title of an advanced title block; the line with <code>=^</code> is considered to be the top title and the line with <code>=_</code> is considered to be the subtitle. A fully populated advanced title block would be something like this:</p>
+<pre class="code code-camus">=^ top title
+=  main title
+=_ subtitle
+</pre>
+<h3>Blocks with a generic syntax</h3>
+<p>This kind of blocks starts with a line containing nothing but <code>#{<i>block-type</i></code> and ends with a line containing nothing but <code>#}</code>. The supported <code>block-type</code> are listed below:</p>
+
+<ul>
+    <li>Metadata blocks have the type of <code>metadata</code>.</li>
+    <li>Tables have the type of <code>table</code>.</li>
+    <li>Block quotes have the type of <code>quote</code>.</li>
+    <li>Comment blocks have the type of <code>ignore</code>.</li>
+    <li>Code blocks have the type of <code>code</code>.</li>
+    <li>Preformatted blocks have the type of <code>verbatim</code>; this name is taken from emacs org-mode.</li>
+    <li>Advanced title blocks have the type of <code>title</code>.</li>
+</ul>
+<p>Code blocks can take an extra argument for the name of the language, e.g. code blocks that starts with <code>#{code javascript</code> would mean it's a javascript code block.</p>
+<h4>Metadata</h4>
+<p>Within the metadata block each non-empty line represents a key-value pair. The key and the value are separated with a colon <code>:</code>. Different tools may support different metadata keys.</p>
+<h4>Tables</h4>
+<p>This section describes the syntax for table <b>within</b> the table block environment.</p>
+<p>A table is made up of two parts: table header and table body. Camus does not support very fancy tables. The two parts are separated by a line containing nothing but at least 5 dashes (<code>-</code>). Each non-empty line represents a row in the table. The content of each cell is separated by <code>|</code>.</p>
+<h4>Raw output blocks</h4>
+<p>This kind of blocks are used to instruct the renderer to add its content directly to the output. Types of this kind of blocks start with <code>=</code>, so its syntax is like <code>#{=html</code>.</p>
+<h4>Advanced title blocks</h4>
+<p>The syntax is the same as metadata blocks but only the following keys are supported:</p>
+
+<ul>
+    <li><code>top-title</code>: the title to be rendered above the main title.</li>
+    <li><code>title</code>: the main title.</li>
+    <li><code>subtitle</code>: the subtitle.</li>
+</ul>
+<h2>Global state flags</h2>
+<p>Global state flags are used to control the renderer's behavior when generating output. The syntax is <code>{flag(<i>flag-name</i>):<i>flag-value</i>}</code>. Different tools may support different global state flags.</p>
+
+
+</body>
+</html>
+
