@@ -4,41 +4,83 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camus :: The markup language for personal knowledge base.</title>
+    <title>The Camus Markup Language</title>
 </head>
 <body>
-    <p><b>Camus :: The markup language for personal knowledge base.</b></p>
-    <p>(Under construction.)</p>
-    <p>Note from SRH:</p>
-    <blockquote style="width: 600px">
-        <p>
-            <b>NOTE 2023.4.10</b>: Camus 2 would be written in <a href="https://nim-lang.org">Nim</a>. There would still be a core library on the NPM registry (using Nim's JS backend), but the current cli tool would not.
-        </p>
-        <p>
-            Yeah, this place is getting rebuilt. I have very great plans for the upcoming Camus 2 (which are spoiled by the slogan above) and future releases of Camus. Meanwhile:
-        </p>
-        <ul>
-            <li>the old doc can still be accessed <a href="./docs/index.html">here</a>.</li>
-            <li>the doc for camus-cli can be accessed <a href="https://camusmarkup.github.io/camus-cli">here</a>.</li>
-            <li>the syntax for Camus 2, planned for core-lib v1.0.0, can be seen <a href="./docs/Syntax.html">here</a>.</li>
-        </ul>
-
-        <p>
-            Why isn't Camus "a humble markup language" anymore? Because being humble won't get you anywhere in this industry. No, to truly success you have to do the most shameless bragging and tell the biggest lies - this is how all the subpar things keep winning every round.
-        </p>
+    <p>Update 2024.9.13: Two points:</p>
+    <ul>
+        <li>Camus 1, Camus 2 and all related tools. From now on I will work on <b>Camus 3</b>.</li>
+        <li>Camus 3 would be incompatible with Camus 1.</li>
+    </ul>
         
-        <p>
-            <b>The more you read about note-taking, the less likely you would actually be taking notes</b>; this is where the original "humble" slogan comes in - I want the tools to be as less disruptive as possible because I'm lazy and don't want to learn "new shiny stuff". I lived with the built-in sticky notes app on my phone and later Microsoft OneNote for nearly a decade simply because they require the least effort to learn and thanks to that this habit stayed and I never felt the urge to brag about how long I've kept doing this.
-        </p>
+    <p>A glimpse of Camus 3's syntax:</p>
+    <pre>
+* Level 1 heading
+** Level 2 heading
+*** Level 3 heading
+**** Level 4 heading
+***** Level 5 heading
+****** Level 6 heading
 
-        <p>
-            At least you can put your trust in me - Camus is a product I use almost daily, so you can be sure that at least <em>someone</em> care, unlike whatever fancy note-taking systems kids these days are using...
-        </p>
-        
-        <p><b>Q: Why not Markdown?</b></p>
+*: top-title
+   title
+   sub-title
+   
+-----
+   
+=> command
 
-        <p><b>Markup languages that have no built-in primitives for wiki-like references and thus need to rely on extra tools should not be used for knowledge management at all because they are fundamentally inferior for knowledge bases</b>. This is also why such references are among the first features designed for Camus 1 - it's a serious language for a serious purpose instead of fitting something into some other things that it's not designed for.</p>
-    </blockquote>
+*bold* /italics/ _underline_ ~~strike_over~~ `inline code`
+{=highlighted=} ^{superscript} _{subscript}
+
+{img(alt):url} {link(alt):url}
+{[namespace]/ref(alt):path}
+{#tag-name}
+{footnote@1,2}
+
+> quoting...
+> quoting...
+> quoting...
+
++ list item 1
++ list item 2
+  + list item 2.1
+  + list item 2.2
+    +list item 2.2.1
+    
+1.  ordered list item 1
+2.  ordered list item 2
+    1.  ordered list item 2.1
+
+##table
+headcell1|headcell2|headcell3
+-----
+row1cell1|row1cell2|row1cell3
+row2cell1|row2cell2|row2cell3
+##
+
+##code python
+  some code...
+##
+
+##quote
+  some quote...
+##
+
+
+##comment
+  comment...
+  comment...
+  comment...
+##
+
+##=html
+<p>raw html output</p>
+##
+
+[1]: footnote text 1
+[2]: footnote text 2
+    </pre>
 
 </body>
 </html>
